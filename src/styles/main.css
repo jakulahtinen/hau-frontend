@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.mainpage {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f2f2f2;
+    margin-bottom: 10vh;
+}
+
+.mainpagewelcome {
+    width: 60%;
+    margin-bottom: 20px;
+    margin-top: -20px;
+}
+
+.mainpagepicture {
+    border-radius: 25px;
+}
+
+.whocanjoinlist {
+    list-style-type: none;
+    margin: 0 auto;     
+    padding: 0;
+    display: inline-block; 
+}
+
+.whocanjoinlist li {
+    display: flex;
+}
+
+.supportedclass {
+    list-style-type: none;
+    margin: 0 auto;     
+    padding: 0;
+    display: inline-block; 
+}
+
+.supportedclass li {
+    display: flex;
+    padding-right: 95px;
+}
+
+.winter {
+    list-style-type: none;     
+    padding: 0;
+}
+
+.winterlist li {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .mainpagepicture {
+        border-radius: 25px;
+        width: 100%;
+        height: 100%;
+    }
+}

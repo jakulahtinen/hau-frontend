@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+footer {
+    width: 100%;
+    position: relative; /* Footerin sijoittaminen */
+    overflow: hidden; /* Estää sisällön leviämisen */
+}
+
+.footer-links {
+    list-style: none;
+    background-color: #ddd;
+    padding: 15px;
+    background-image: url('../assets/footerpic.jpg');
+    background-position: center;
+}
+
+.footer-links .footer-icon {
+    width: 60px;
+    height: 60px;
+    color: #f2f2f2;
+}
+
+.cooperation-text {
+    text-align: center;
+    padding: 10px;
+    border-top: 2px solid #ddd;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cooperation-container {
+    display: flex;
+    flex-wrap: wrap; /* Mahdollistaa rivittymisen */
+    justify-content: center; /* Keskittää kuvat vaakasuunnassa */
+    gap: 30px; /* Väli kuvien välillä */
+    max-width: 1200px; /* Rajoittaa säilön leveyttä */
+    margin: 0 auto; /* Keskittää säilön sivulle */
+}
+
+.cooperation-container img {
+    flex: 1 1 calc(33.33% - 30px); /* 3 kuvaa vierekkäin, ottaa huomioon gap */
+    max-width: 300px; /* Maksimileveys yksittäiselle kuvalle */
+    height: auto; /* Skaalaa korkeus mittasuhteiden mukaan */
+    object-fit: contain; /* Varmistaa kuvan oikean skaalaamisen */
+}
+
+@media (max-width: 768px) {
+    .cooperation-container img {
+        flex: 1 1 calc(50% - 15px);
+    }
+}
+
+@media (max-width: 480px) {
+    .cooperation-container img {
+        flex: 1 1 calc(100% - 10px); 
+    }
+} 
+
+
+.copyright {
+    text-align: center;
+    color: #FBFEED;
+}

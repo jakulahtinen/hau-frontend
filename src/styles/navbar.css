@@ -1,0 +1,46 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.navbar {
+    display: flex;
+    justify-content: space-around; /* Jakaa linkit tasaisesti */
+    align-items: center;
+    flex-wrap: wrap; /* Sallii rivittämisen pienillä näytöillä */
+    padding: 20px;
+    font-family: 'Poppins', sans-serif; /* Google-fontti */
+    font-weight: 600; /* Fontin paksuus */
+    border-bottom: 2px solid #ddd; /* Alareunan korostus */
+    list-style: none;
+    width: 100%; /* Varmistaa, että navbar täyttää koko leveyden */
+    box-sizing: border-box; /* Sisältää paddingin */
+}
+
+.navbar a {
+    margin: 5px 10px; /* Vähennä marginaalia, jotta mahtuu pienempiin näkymiin */
+    text-decoration: none; 
+    color: #333; 
+    position: relative;
+    padding: 0 10px; 
+    transition: color 0.3s ease; 
+    white-space: nowrap; /* Estää tekstien katkeamisen */
+}
+
+.navbar a:hover {
+    color: #007bff; 
+}
+
+.navbar a:hover::after {
+    color: #007bff; 
+}
+
+/* Responsiivisuus pienille näytöille */
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: center; /* Keskittää linkit */
+        flex-direction: column; /* Asettaa linkit pystysuuntaisesti */
+    }
+
+    .navbar a {
+        margin: 10px 0; /* Lisää väliä pystysuuntaisille linkeille */
+    }
+}

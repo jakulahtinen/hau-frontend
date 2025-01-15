@@ -1,0 +1,34 @@
+/* Headerin perusasetukset */
+.header {
+    width: 100%; /* Kattaa koko sivun leveyden */
+    height: auto; /* Skaalautuu kuvan korkeuden mukaan */
+    display: flex; /* Asetellaan sisältö joustavasti */
+    justify-content: center; /* Sisältö keskelle vaakasuunnassa */
+    align-items: center; /* Sisältö keskelle pystysuunnassa */
+    position: relative; /* Mahdollistaa lisätyylit (esim. overlay) */
+    overflow: hidden; /* Piilottaa ylimääräisen sisällön */
+    padding: 0; /* Poistaa oletusmarginaalit */
+    margin: 0; /* Poistaa oletusreunukset */
+}
+
+/* Header-kuva */
+.headerPicture {
+    width: 100%; /* Kuva täyttää headerin leveyden */
+    height: 100%; /* Kuva täyttää headerin korkeuden */
+    object-fit: cover; /* Kuva täyttää headerin alueen ilman vääristymiä */
+    display: block; /* Poistaa ylimääräiset marginaalit */
+    object-position: center top; /* Kuva keskittyy headerin keskelle */
+}
+
+/* Responsiivisuus: Suurilla näytöillä */
+@media (min-width: 1200px) {
+    .header {
+        height: 75vh; /* Suurempi korkeus suurilla näytöillä */    }
+}
+
+/* Responsiivisuus: Pienillä näytöillä */
+@media (max-width: 768px) {
+    .header {
+        height: 50vh; /* Pienempi korkeus mobiilissa */
+    }
+}
