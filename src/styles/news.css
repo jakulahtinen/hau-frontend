@@ -9,3 +9,14 @@
     background-color: #f2f2f2;
     margin-bottom: 10vh;
 }
+
+.news-page {
+    padding: 20px;
+}
+
+.news-item {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}

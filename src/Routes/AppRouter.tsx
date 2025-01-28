@@ -6,6 +6,8 @@ import Videospage from "../components/videospage";
 import Joinpage from "../components/joinpage";
 import Contactpage from "../components/contactpage";
 import Newspage from "../components/newspage";
+import Loginpage from "../components/loginpage";
+import Adminpanel from "../components/adminpage";
 
 const AppRouter = () => {
     return (
@@ -16,6 +18,8 @@ const AppRouter = () => {
             <Route path="/videos" element={<Videospage />} />
             <Route path="/join" element={<Joinpage />} />
             <Route path="/contact" element={<Contactpage />} />
+            <Route path="/login" element={<Loginpage />} />
+            <Route path="/admin" element={<Adminpanel />} />
         </Routes>
     );
 };
