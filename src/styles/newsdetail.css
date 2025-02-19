@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.news-detail {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f2f2f2;
+    margin-bottom: 10vh;
+}
+
+.news-detail h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.news-detail-image {
+    width: 50%;
+    max-height: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+.news-detail p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.news-header {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.back:hover {
+    text-decoration: underline;
+}

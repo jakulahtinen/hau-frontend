@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/admin.css";
+import Adminnav from "./adminnav";
 
 interface News {
     id: number;
@@ -25,7 +26,13 @@ const AdminPanel = () => {
                 throw new Error(`HTTP Error: ${response.status}`);
             }
             const data = await response.json();
-            setNewsList(data);
+
+            const sortedData = data.sort(
+                (a: { publishedAt: string }, b: { publishedAt: string }) =>
+                    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+                );
+            setNewsList(sortedData);
+
         } catch (err) {
             console.error("Failed to fetch news:", err);
         }
@@ -53,58 +60,52 @@ const AdminPanel = () => {
 
     const handleAddNews = async () => {
         if (!title || !content) {
-          return alert("Täytä kaikki kentät!");
+            return alert("Täytä kaikki kentät!");
         }
-
-        let imageData = null;
-
+    
+        const token = localStorage.getItem("token");
+    
+        if (!token) {
+            alert("Et ole kirjautunut sisään!");
+            return;
+        }
+    
+        let imageData = "";
+    
         if (imageFile) {
             const reader = new FileReader();
-            reader.readAsDataURL(imageFile);
-
-            reader.onload = async () => {
-                imageData = reader.result?.toString().split(",")[1]; // Base64 data
-
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ title, content, imageData }),
-                });
-
-                if (response.ok) {
-                    fetchNews();
-                    setTitle("");
-                    setContent("");
-                    setImageFile(null);
-                    setImagePreview(null);
-                } else {
-                    alert("Failed to add news.");
-                }
-            };
-        } else {
-            // Send without image
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title, content, imageData: null }), // Image is null
+    
+            const imagePromise = new Promise<string>((resolve) => {
+                reader.onload = () => {
+                    const base64Data = reader.result?.toString().split(",")[1] || "";
+                    resolve(base64Data);
+                };
+                reader.readAsDataURL(imageFile);
             });
-
-            if (response.ok) {
-                fetchNews();
-                setTitle("");
-                setContent("");
-                setImageFile(null);
-                setImagePreview(null);
-            } else {
-                alert("Failed to add news.");
-            }
+    
+            imageData = await imagePromise;
+        }
+    
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify({ title, content, imageData }),
+        });
+    
+        if (response.ok) {
+            fetchNews();
+            setTitle("");
+            setContent("");
+            setImageFile(null);
+            setImagePreview(null);
+        } else {
+            alert("Failed to add news.");
         }
     };
-
+    
     const handleDeleteNews = async (id: number) => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${id}`, {
             method: "DELETE",
@@ -149,6 +150,7 @@ const AdminPanel = () => {
     return (
         <div className="admin-panel">
             <h1>Admin Panel</h1>
+            <Adminnav/>
             <div className="add-news">
                 <h2>{editMode ? "Edit News" : "Add News"}</h2>
                 <input

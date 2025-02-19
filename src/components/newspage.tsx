@@ -22,7 +22,12 @@ const NewsPage = () => {
                     throw new Error("Uutisten haku epäonnistui");
                 }
                 const data = await response.json();
-                setNewsList(data);
+
+                const sortedData = data.sort(
+                    (a: { publishedAt: string }, b: { publishedAt: string }) =>
+                        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+                    );
+                setNewsList(sortedData);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
             } finally {
@@ -36,25 +41,26 @@ const NewsPage = () => {
     if (error) return <p>Virhe: {error}</p>;
 
     return (
-        <div className="news-page">
-            <h1>Uutiset</h1>
-            {newsList.length === 0 ? (
-                <p>Ei uutisia saatavilla.</p>
-            ) : (
-                newsList.map((news) => (
-                    <div key={news.id} className="news-item">
-                        <h2>{news.title}</h2>
-                        <p>{news.content}</p>
-                        {news.imageData && (
+        <div className="news-container">
+            {newsList.map((news: any) => (
+                <div className="news-item" key={news.id}>
+                    <div className="news-image">
+                        {news.imageData ? (
                             <img
-                                src={`data:image/png;base64,${news.imageData}`}
-                                alt="Uutisen kuva"
-                                style={{ maxWidth: "200px", maxHeight: "200px" }}
+                            src={news.imageData ? `data:image/jpeg;base64,${news.imageData}` : 'default-image.jpg'}
+                            alt={news.title}
                             />
+                        ) : (
+                            <div className="placeholder">Ei kuvaa</div>
                         )}
                     </div>
-                ))
-            )}
+                    <div className="news-content">
+                        <h3 className="news-title">{news.title}</h3>
+                        <p className="news-summary">{news.content.substring(0, 150)}...</p>
+                        <a href={`/news/${news.id}`} className="read-more">Lue lisää</a>
+                    </div>
+                </div>
+            ))}
         </div>
     );
 };

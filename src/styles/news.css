@@ -1,22 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-.newspage {
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f2f2f2;
-    margin-bottom: 10vh;
-}
-
-.news-page {
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
     padding: 20px;
+    font-family: "Poppins", sans-serif;
 }
 
 .news-item {
-    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column; /* Asettaa sisällön pinoamaan pystysuunnassa */
+    justify-content: space-between; /* Täyttää tilaa ja vie "Lue lisää" alas */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+}
+
+.news-image img {
+    width: 100%; /* Kuvan leveys täyttämään vanhemman leveys */
+    height: 200px; /* Kuvan korkeus */
+    object-fit: cover; /* Varmistaa, että kuva pysyy alkuperäisessä mittasuhteessa */
+    object-position: center; /* Asettaa kuvan keskelle, jos se on pienempi kuin kontaineri */
+}
+
+.news-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.news-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.news-summary {
+    font-size: 1rem;
+    color: #555;
     margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
+}
+
+.read-more {
+    margin-top: auto;
+    text-decoration: none;
+    font-weight: bold;
+    color: #007BFF;
+    cursor: pointer;
+    align-self: flex-center;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 1.2rem;
+    background: #e0e0e0; 
+    border: 2px dashed #ccc;
+    text-align: center;
 }

@@ -52,6 +52,47 @@
     display: flex;
 }
 
+/* News */
+.latest-news {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Lisää minmax-arvoa, jotta uutiset voivat olla leveämpiä */
+    gap: 1rem;
+    padding: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.news-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 1rem;
+}
+
+.news-item h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.news-item p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.read-more {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
 @media (max-width: 768px) {
     .mainpagepicture {
         border-radius: 25px;
