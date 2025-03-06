@@ -3,8 +3,15 @@ import { Link } from "react-router-dom";
 import "../styles/main.css";
 import mainpagepicture from '../assets/mainpageheader.jpg';
 
+interface News {
+    id: number;
+    title: string;
+    content: string;
+    imageData?: string;
+}
+
 const Mainpage = () => {
-    const [newsList, setNewsList] = useState<{ id: number; title: string; content: string }[]>([]);
+    const [newsList, setNewsList] = useState<News[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -16,13 +23,11 @@ const Mainpage = () => {
                     throw new Error("Uutisten haku epäonnistui");
                 }
                 const data = await response.json();
-                // Sort newest events first and take just two.
-                const latestNews = data
-                    .sort((a: { createdAt: string }, b: { createdAt: string }) =>
-                        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                const latestNews = data.sort(
+                    (a: { publishedAt: string }, b: { publishedAt: string }) =>
+                        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
                     )
                     .slice(0, 2);
-
                 setNewsList(latestNews);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
@@ -48,19 +53,36 @@ const Mainpage = () => {
         </div>
 
         <h1>Viimeisimmät uutiset</h1>
-        {loading ? <p>Ladataan...</p> : error ? <p style={{ color: "red" }}>{error}</p> : (
+        {loading ? (
+            <p>Ladataan...</p>
+        ) : error ? (
+            <p style={{ color: "red" }}>{error}</p>
+        ) : (
             <div className="latest-news">
                 {newsList.map((news) => (
-                    <div key={news.id} className="news-item">
-                        <h3>{news.title}</h3>
-                        <p>{news.content.substring(0, 100)}...</p> {/* Näytetään vain osa tekstistä */}
-                    </div>
+                    <Link key={news.id} to={`/news/${news.id}`} className="news-item-link">
+                        <div className="news-item">
+                            <h3>{news.title}</h3>
+
+                            {/* Only render the div if there is an image */}
+                            {news.imageData && (
+                                <div className="news-image-frontpage">
+                                    <img
+                                        src={`data:image/jpeg;base64,${news.imageData}`}
+                                        alt={news.title}
+                                    />
+                                </div>
+                            )}
+                            <p>{news.content}...</p>
+                        </div>
+                    </Link>
                 ))}
-                <Link to="/events" className="read-more">Lue lisää</Link> {/* Tämän vietävä /events */}
+                <Link to="/events" className="read-more" style={{ fontSize: "large" }}>
+                    Lue lisää
+                </Link>
             </div>
         )}
 
-        {/* //This is development branch */}
 
         <h1>Kuka voi liittyä mukaan?</h1>
         <div className="whocanjoin">

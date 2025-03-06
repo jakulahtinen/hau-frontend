@@ -29,20 +29,19 @@
 }
 
 .news-header {
+    width: 100%;
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    margin-bottom: 10px;
 }
 
-.back {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.back-button {
     cursor: pointer;
     color: #007BFF;
+    font-size: 2rem;
     text-decoration: none;
 }
 
-.back:hover {
+.back-button:hover {
     text-decoration: underline;
 }

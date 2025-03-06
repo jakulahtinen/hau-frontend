@@ -107,14 +107,25 @@ const AdminPanel = () => {
     };
     
     const handleDeleteNews = async (id: number) => {
+        const token = localStorage.getItem("token"); 
+    
+        if (!token) {
+            alert("No token found! Please log in again.");
+            return;
+        }
+    
         const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${id}`, {
             method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
         });
-
+    
         if (response.ok) {
-            fetchNews();
+            fetchNews(); 
         } else {
-            alert("Failed to delete news.");
+            alert("Failed to delete news. Please check your permissions.");
         }
     };
 
@@ -127,15 +138,23 @@ const AdminPanel = () => {
 
     const handleUpdateNews = async () => {
         if (!editId) return;
-
+    
+        const token = localStorage.getItem("token");
+    
+        if (!token) {
+            alert("No token found! Please log in again.");
+            return;
+        }
+    
         const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${editId}`, {
             method: "PUT",
             headers: {
+                "Authorization": `Bearer ${token}`, // Include token
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ title, content }),
         });
-
+    
         if (response.ok) {
             fetchNews();
             setEditMode(false);
@@ -143,7 +162,7 @@ const AdminPanel = () => {
             setTitle("");
             setContent("");
         } else {
-            alert("Failed to edit news.");
+            alert("Failed to edit news. Please check your permissions.");
         }
     };
 
@@ -165,16 +184,19 @@ const AdminPanel = () => {
                     onChange={(e) => setContent(e.target.value)}
                 />
                 <input type="file" accept="image/*" onChange={handleFileChange} />
+
                 {imagePreview && (
                     <div>
-                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "200px", maxHeight: "200px", margin: "10px 0" }} />
-                        <button onClick={handleDeleteImage}>Delete Image</button>
+                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "50%", maxHeight: "50%", margin: "10px 0",  borderRadius: "15px"}} />
+                        <br />
+                        <button onClick={handleDeleteImage} className="delete-button" >Delete Image</button>
                     </div>
                 )}
+                <br />
                 {editMode ? (
-                    <button onClick={handleUpdateNews}>Update</button>
+                    <button onClick={handleUpdateNews} className="update-button">Update</button>
                 ) : (
-                    <button onClick={handleAddNews}>Publish</button>
+                    <button onClick={handleAddNews} className="publish-button">Publish</button>
                 )}
             </div>
             <div className="news-list">
@@ -191,11 +213,11 @@ const AdminPanel = () => {
                                     <img
                                         src={`data:image/png;base64,${news.imageData}`}
                                         alt="News Image"
-                                        style={{ maxWidth: "200px", maxHeight: "200px" }}
+                                        style={{ maxWidth: "50%", maxHeight: "50%" }}
                                     />
                                 )}
-                                <button onClick={() => handleEditNews(news)}>Edit</button>
-                                <button onClick={() => handleDeleteNews(news.id)}>Delete</button>
+                                <button onClick={() => handleEditNews(news)} className="edit-button">Edit</button>
+                                <button onClick={() => handleDeleteNews(news.id)} className="deleteNews-button">Delete</button>
                             </li>
                         ))}
                     </ul>

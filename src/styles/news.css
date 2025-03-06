@@ -10,8 +10,8 @@
 
 .news-item {
     display: flex;
-    flex-direction: column; /* Asettaa sisällön pinoamaan pystysuunnassa */
-    justify-content: space-between; /* Täyttää tilaa ja vie "Lue lisää" alas */
+    flex-direction: column; 
+    justify-content: space-between; 
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -25,10 +25,10 @@
 }
 
 .news-image img {
-    width: 100%; /* Kuvan leveys täyttämään vanhemman leveys */
-    height: 200px; /* Kuvan korkeus */
-    object-fit: cover; /* Varmistaa, että kuva pysyy alkuperäisessä mittasuhteessa */
-    object-position: center; /* Asettaa kuvan keskelle, jos se on pienempi kuin kontaineri */
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+    object-position: center; 
 }
 
 .news-content {

@@ -50,7 +50,11 @@ const NewsDetail = () => {
         <div className="news-detail" ref={newsRef}>
             {news ? (
                 <>
-                <Link to="/events"><ArrowBackIosNewRoundedIcon fontSize="large" style={{marginTop: "5px"}}/></Link>
+                    <div className="news-header">
+                        <Link to="/events">
+                            <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" />
+                        </Link>
+                    </div>
                     <h1>{news.title}</h1>
                     {news.imageData && (
                         <img
