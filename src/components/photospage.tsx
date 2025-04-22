@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
+import { Picture } from "../interfaces/picture";
+import { fetchPictures } from "../api/picturesApi";
+import '../styles/photos.css';
 
-const Photospage = () => (
-    <div>
-        <h1>KUVAT </h1>
-    </div>
-);
+const Photospage = () => {
+    const [photosList, setPhotosList] = useState<Picture[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadPhotos = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchPictures();
+                setPhotosList(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "Tuntematon virhe");
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadPhotos();
+    }, []);
+
+    if (loading) return <p>Ladataan kuvia...</p>;
+    if (error) return <p>Virhe: {error}</p>;
+
+    return (
+        <div className="photos-container">
+            {photosList.map((photo: any) => (
+                <div className="photo-item" key={photo.id}>
+                    <img
+                    src={photo.imageData ? `data:image/jpeg;base64,${photo.imageData}` : 'default-image.jpg'}
+                    alt={photo.title} className="photo-image" />
+                    <h3 className="photo-title">{photo.title}</h3>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 export default Photospage;

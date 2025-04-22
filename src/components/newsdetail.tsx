@@ -30,24 +30,6 @@ const NewsDetail = () => {
         fetchNews();
     }, [id]);
 
-    // useEffect(() => {
-    //     const loadNews = async () => {
-    //         try {
-    //             const data = await fetchSingleNews(id);
-    //             setNews(data); 
-    //         } catch (err) {
-    //             setError(err instanceof Error ? err.message : "Tuntematon virhe");
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     loadNews();
-    // }, [id]);
-
-
-
-
     useEffect(() => {
         if (news) {
             setTimeout(() => {

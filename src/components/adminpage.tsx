@@ -127,7 +127,7 @@ const AdminPanel = () => {
             <h1>Admin-Paneeli</h1>
             <Adminnav/>
             <div className="add-news">
-                <h2>{editMode ? "Edit News" : "Add News"}</h2>
+                <h2>{editMode ? "Muokkaa uutista" : "Lisää uutinen"}</h2>
                 <input
                     type="text"
                     placeholder="Otsikko"
