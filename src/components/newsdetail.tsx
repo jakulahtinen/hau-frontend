@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import { fetchSingleNews } from "../api/newsApi";
 import "../styles/newsdetail.css";
 
 const NewsDetail = () => {
@@ -51,7 +50,7 @@ const NewsDetail = () => {
                 <>
                     <div className="news-header">
                         <Link to="/events">
-                            <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" />
+                            <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" style={{ color: "black" }}/>
                         </Link>
                     </div>
                     <h1>{news.title}</h1>
