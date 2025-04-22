@@ -13,7 +13,6 @@ const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
-    const menuRef = useRef<HTMLUListElement | null>(null);
     const [spin, setSpin] = useState(false);
 
 
