@@ -1,40 +1,40 @@
-import React, { useState, useEffect } from "react";
-import "../styles/admin.css";
+import React, { useState, useEffect, useRef } from "react";
+import { Picture } from "../interfaces/picture";
+import { fetchPictures, addPicture, deletePicture, updateCaption } from "../api/picturesApi";
 import Adminnav from "./adminnav";
+import "../styles/addpicture.css";
 
-interface News {
-    id: number;
-    title: string;
-    content: string;
-    imageData?: string;
-}
-
-const Addpicture = () => {
-    const [newsList, setNewsList] = useState<News[]>([]);
+const AddPicture = () => {
+    const [pictures, setPictures] = useState<Picture[]>([]);
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [editMode, setEditMode] = useState(false);
-    const [editId, setEditId] = useState<number | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [editMode, setEditMode] = useState(false);
+    const [editId, setEditId] = useState<number | null>(null);
+    const [successMessage, setSuccesMessage] = useState<string | null>(null);
 
-    // HERE FETCH PICTURES FROM BACKEND
-    // const fetchNews = async () => {
-    //     try {
-    //         const response = await fetch(`${process.env.REACT_APP_API_URL}/News`);
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP Error: ${response.status}`);
-    //         }
-    //         const data = await response.json();
-    //         setNewsList(data);
-    //     } catch (err) {
-    //         console.error("Failed to fetch news:", err);
-    //     }
-    // };
+    useEffect(() => {
+        loadPictures();
+    }, []);
 
-    // useEffect(() => {
-    //     fetchNews();
-    // }, []);
+    const loadPictures = async () => {
+        try {
+            const data = await fetchPictures();
+            setPictures(data);
+        } catch (error) {
+            console.error("Error loading pictures:", error);
+        }
+    };
+
+    const handleDeleteImage = () => {
+        setImageFile(null);
+        setImagePreview(null);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -47,162 +47,145 @@ const Addpicture = () => {
         }
     };
 
-    const handleDeleteImage = () => {
-        setImageFile(null);
-        setImagePreview(null);
+    const handleAddPicture = async () => {
+        if (!imageFile) {
+            alert("Valitse kuva.");
+            return;
+        }
+        try {
+            await addPicture(title, imageFile);
+            setSuccesMessage("Kuva lisatty onnistuneesti!");
+            setTimeout(() => {
+                setSuccesMessage(null);
+            }, 4000);
+            setTitle("");
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            setImageFile(null);
+            setImagePreview(null);
+            loadPictures();
+        } catch (error) {
+            console.error("Error adding picture:", error);
+            alert("Kuvan lisääminen epäonnistui.");
+        }
     };
 
-    // const handleAddNews = async () => {
-    //     if (!title || !content) {
-    //       return alert("Täytä kaikki kentät!");
-    //     }
+    const handleUpdateCaption = async () => {
+        if (!editId) return;
+        try {
+            await updateCaption(editId, title);
+            setEditMode(false);
+            setEditId(null);
+            setTitle("");
+            setImageFile(null);
 
-    //     let imageData = null;
+            setSuccesMessage("Kuvateksti päivitetty onnistuneesti!");
+            setTimeout(() => {  
+                setSuccesMessage(null);
+            }, 4000);
+            loadPictures();
+        } catch (error) {
+            console.error("Error updating caption:", error);
+            alert("Kuvatekstin muokkaaminen epäonnistui.");
+        }
+    };
 
-    //     if (imageFile) {
-    //         const reader = new FileReader();
-    //         reader.readAsDataURL(imageFile);
+    const handleEditCaption = (picture: Picture) => {
+        setEditMode(true);
+        setEditId(picture.id);
+        setTitle(picture.title);
+    };
 
-    //         reader.onload = async () => {
-    //             imageData = reader.result?.toString().split(",")[1]; // Base64 data
+    const handleDeletePicture = async (id: number) => {
+        try {
+            await deletePicture(id);
+            setSuccesMessage("Kuva poistettu onnistuneesti!");
 
-    //             const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 body: JSON.stringify({ title, content, imageData }),
-    //             });
-
-    //             if (response.ok) {
-    //                 fetchNews();
-    //                 setTitle("");
-    //                 setContent("");
-    //                 setImageFile(null);
-    //                 setImagePreview(null);
-    //             } else {
-    //                 alert("Failed to add news.");
-    //             }
-    //         };
-    //     } else {
-    //         // Send without image
-    //         const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({ title, content, imageData: null }), // Image is null
-    //         });
-
-    //         if (response.ok) {
-    //             fetchNews();
-    //             setTitle("");
-    //             setContent("");
-    //             setImageFile(null);
-    //             setImagePreview(null);
-    //         } else {
-    //             alert("Failed to add news.");
-    //         }
-    //     }
-    // };
-
-    // const handleDeleteNews = async (id: number) => {
-    //     const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${id}`, {
-    //         method: "DELETE",
-    //     });
-
-    //     if (response.ok) {
-    //         fetchNews();
-    //     } else {
-    //         alert("Failed to delete news.");
-    //     }
-    // };
-
-    // const handleEditNews = (news: News) => {
-    //     setEditMode(true);
-    //     setEditId(news.id);
-    //     setTitle(news.title);
-    //     setContent(news.content);
-    // };
-
-    // const handleUpdateNews = async () => {
-    //     if (!editId) return;
-
-    //     const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${editId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({ title, content }),
-    //     });
-
-    //     if (response.ok) {
-    //         fetchNews();
-    //         setEditMode(false);
-    //         setEditId(null);
-    //         setTitle("");
-    //         setContent("");
-    //     } else {
-    //         alert("Failed to edit news.");
-    //     }
-    // };
+            //Hide message after 2 seconds>
+            setTimeout(() => {  
+                setSuccesMessage(null);
+            }, 4000);
+            loadPictures();
+        } catch (error) {
+            console.error("Error deleting picture:", error);
+            alert("Kuvan poistaminen epäonnistui.");
+        }
+    };
 
     return (
         <div className="admin-panel">
             <h1>Admin Panel</h1>
-            <Adminnav/>
-            <div className="add-news">
-                <h2>{editMode ? "Edit News" : "Add News"}</h2>
+            <Adminnav />
+            <div className="add-picture">
+                <h2>Lisää uusi kuva</h2>
                 <input
-                    type="text"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                 type="file" 
+                 accept="image/*" 
+                 onChange={handleFileChange} 
+                 ref={fileInputRef}
                 />
-                <textarea
-                    placeholder="Content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
-                <input type="file" accept="image/*" onChange={handleFileChange} />
                 {imagePreview && (
                     <div>
-                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "200px", maxHeight: "200px", margin: "10px 0" }} />
-                        <button onClick={handleDeleteImage}>Delete Image</button>
+                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "50%", maxHeight: "50%", margin: "10px 0", borderRadius: "15px" }} />
+                        <br />
+                        <button onClick={handleDeleteImage} className="delete-picture">Poista kuva</button>
                     </div>
                 )}
-                {/* {editMode ? (
-                    <button onClick={handleUpdateNews}>Update</button>
+                <textarea
+                placeholder="Kuvateksti..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                />
+                {editMode ? (
+                    <button onClick={handleUpdateCaption} className="publish-button">Päivitä</button>
                 ) : (
-                    <button onClick={handleAddNews}>Publish</button>
-                )} */}
+                    <button onClick={handleAddPicture} className="publish-button">Julkaise</button>
+                )}
             </div>
-            <div className="news-list">
-                <h2>Current Photos</h2>
-                {newsList.length === 0 ? (
-                    <p>No news.</p>
+            <div className="image-list">
+                <h2>Lisätyt kuvat</h2>
+                {pictures.length === 0 ? (
+                    <p>Ei lisättyjä kuvia.</p>
                 ) : (
                     <ul>
-                        {newsList.map((news) => (
-                            <li key={news.id}>
-                                <h3>{news.title}</h3>
-                                <p>{news.content}</p>
-                                {news.imageData && (
+                        {pictures.map((picture) => (
+                            <li key={picture.id}>
+
+                                {picture.imageData && (
                                     <img
-                                        src={`data:image/png;base64,${news.imageData}`}
+                                        src={`data:image/png;base64,${picture.imageData}`}
                                         alt="News Image"
-                                        style={{ maxWidth: "200px", maxHeight: "200px" }}
+                                        style={{ maxWidth: "50%", maxHeight: "50%" }}
                                     />
                                 )}
-                                {/* <button onClick={() => handleEditNews(news)}>Edit</button>
-                                <button onClick={() => handleDeleteNews(news.id)}>Delete</button> */}
+                                <p>{picture.title}</p>
+                                <button onClick={() => handleEditCaption(picture)} className="edit-button">Muokkaa</button>
+                                <button onClick={() => handleDeletePicture(picture.id)} className="delete-picture">Poista</button>
                             </li>
                         ))}
                     </ul>
                 )}
             </div>
+            {successMessage && (
+                <div style={{
+                    position: "fixed",
+                    bottom: "20px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    backgroundColor: "#d4edda",
+                    color: "#155724",
+                    padding: "12px 24px",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    zIndex: 9999,
+                    border: "1px solid #c3e6cb"
+                }}>
+            {successMessage}
+            </div>
+        )}
         </div>
     );
 };
 
-export default Addpicture;
+export default AddPicture;

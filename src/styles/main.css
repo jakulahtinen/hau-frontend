@@ -65,24 +65,22 @@
     font-family: "Poppins", sans-serif;
 }
 
-.news-item {
+.news-item-frontpage {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
     padding: 1rem;
     min-height: 15rem;
+    white-space: pre-line;
+    border-bottom: #ccc 2px solid;
 }
 
-.news-item h3 {
+.news-item-frontpage h3 {
     font-size: 1.5rem;
     font-weight: bold;
 }
 
-.news-item p {
+.news-item-frontpage p {
     font-size: 1rem;
     color: #555;
 }
@@ -103,6 +101,11 @@
     border-radius: 15px;
 }
 
+.news-image-frontpage img:hover {
+    transform: scale(1.05);
+    transition-duration: 0.5s;
+}
+
 @media (max-width: 768px) {
     .mainpagepicture {
         border-radius: 25px;
@@ -120,6 +123,6 @@
 }
 
 .news-item-link {
-    text-decoration: none; /* Poistaa linkin alleviivauksen */
-    color: inherit; /* Säilyttää tekstin värin */
+    text-decoration: none;
+    color: inherit; 
 }

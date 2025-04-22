@@ -1,16 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import { fetchSingleNews } from "../api/newsApi";
 import "../styles/newsdetail.css";
 
 const NewsDetail = () => {
-    const { id } = useParams<{ id: string }>(); // Haetaan uutisen ID URL:stä
+    const { id } = useParams<{ id: string }>(); 
     const [news, setNews] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
-    const newsRef = useRef<HTMLDivElement>(null); // Ref uutisen sisällölle
+    const newsRef = useRef<HTMLDivElement>(null); 
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -30,6 +29,24 @@ const NewsDetail = () => {
 
         fetchNews();
     }, [id]);
+
+    // useEffect(() => {
+    //     const loadNews = async () => {
+    //         try {
+    //             const data = await fetchSingleNews(id);
+    //             setNews(data); 
+    //         } catch (err) {
+    //             setError(err instanceof Error ? err.message : "Tuntematon virhe");
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     loadNews();
+    // }, [id]);
+
+
+
 
     useEffect(() => {
         if (news) {

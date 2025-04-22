@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/news.css";
-
-interface News {
-    id: number;
-    title: string;
-    content: string;
-    imageData?: string;
-}
+import { News } from "../interfaces/news";
+import { fetchNews } from "../api/newsApi";
 
 const NewsPage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
@@ -14,27 +9,18 @@ const NewsPage = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchNews = async () => {
+        const loadNews = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/news`);
-                if (!response.ok) {
-                    throw new Error("Uutisten haku epäonnistui");
-                }
-                const data = await response.json();
-
-                const sortedData = data.sort(
-                    (a: { publishedAt: string }, b: { publishedAt: string }) =>
-                        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-                    );
-                setNewsList(sortedData);
+                const data = await fetchNews();
+                setNewsList(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
             } finally {
                 setLoading(false);
             }
         };
-        fetchNews();
+        loadNews();
     }, []);
 
     if (loading) return <p>Ladataan uutisia...</p>;
@@ -55,8 +41,12 @@ const NewsPage = () => {
                         )}
                     </div>
                     <div className="news-content">
-                        <h3 className="news-title">{news.title}</h3>
-                        <p className="news-summary">{news.content.substring(0, 150)}...</p>
+                        <div className="news-title">
+                            <h3>{news.title}</h3>
+                        </div>
+                        <div className="news-summary">
+                            <p>{news.content.substring(0, 50)}...</p>
+                        </div>
                         <a href={`/news/${news.id}`} className="read-more">Lue lisää</a>
                     </div>
                 </div>

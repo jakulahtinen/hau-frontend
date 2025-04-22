@@ -2,13 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/main.css";
 import mainpagepicture from '../assets/mainpageheader.jpg';
-
-interface News {
-    id: number;
-    title: string;
-    content: string;
-    imageData?: string;
-}
+import { News } from "../interfaces/news";
+import { fetchNews } from "../api/newsApi";
 
 const Mainpage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
@@ -16,19 +11,10 @@ const Mainpage = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchLatestNews = async () => {
+        const loadNews = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/news`);
-                if (!response.ok) {
-                    throw new Error("Uutisten haku epäonnistui");
-                }
-                const data = await response.json();
-                const latestNews = data.sort(
-                    (a: { publishedAt: string }, b: { publishedAt: string }) =>
-                        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-                    )
-                    .slice(0, 2);
-                setNewsList(latestNews);
+                const data = (await fetchNews()).slice(0, 3);
+                setNewsList(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
             } finally {
@@ -36,7 +22,7 @@ const Mainpage = () => {
             }
         };
 
-        fetchLatestNews();
+        loadNews();
     }, []);
 
     return (
@@ -59,30 +45,31 @@ const Mainpage = () => {
             <p style={{ color: "red" }}>{error}</p>
         ) : (
             <div className="latest-news">
-                {newsList.map((news) => (
-                    <Link key={news.id} to={`/news/${news.id}`} className="news-item-link">
-                        <div className="news-item">
-                            <h3>{news.title}</h3>
+            {newsList.map((news) => (
+                <div key={news.id} className="news-item-frontpage">
 
-                            {/* Only render the div if there is an image */}
-                            {news.imageData && (
-                                <div className="news-image-frontpage">
-                                    <img
-                                        src={`data:image/jpeg;base64,${news.imageData}`}
-                                        alt={news.title}
-                                    />
-                                </div>
-                            )}
-                            <p>{news.content}...</p>
-                        </div>
+                    <Link to={`/news/${news.id}`} className="news-item-link">
+                        <h3>{news.title}</h3>
                     </Link>
-                ))}
+
+                    {news.imageData && (
+                        <Link to={`/news/${news.id}`} className="news-image-frontpage">
+                            <img
+                                src={`data:image/jpeg;base64,${news.imageData}`}
+                                alt={news.title}
+                            />
+                        </Link>
+                    )}
+    
+                    <p>{news.content}</p>
+                </div>
+            ))}
+                {/* TÄHÄN KORJAUS ETTÄ VIERITTYY OIKEALLE KOHDALLE */}
                 <Link to="/events" className="read-more" style={{ fontSize: "large" }}>
                     Lue lisää
                 </Link>
             </div>
         )}
-
 
         <h1>Kuka voi liittyä mukaan?</h1>
         <div className="whocanjoin">

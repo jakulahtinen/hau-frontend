@@ -1,21 +1,118 @@
-export interface News {
-  Title: string;
-  Content: string;
-  PublishedAt?: Date;
+import { News } from "../interfaces/news";
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+// GET News
+export const fetchNews = async (): Promise<News[]> => {
+  const response = await fetch(`${API_URL}/News`);
+  if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+  
+  const data: News[] = await response.json();
+
+  // Sorting the news
+  const sortedNews = data.sort((a, b) => {
+      const aPublishedAt = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+      const bPublishedAt = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+      
+      // Sorting news by descending order
+      return bPublishedAt - aPublishedAt;
+  });
+
+  return sortedNews;
+};
+
+// GET Single News
+export const fetchSingleNews = async (id: number): Promise<News> => {
+  const response = await fetch(`${API_URL}/News/${id}`);
+  if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+  return response.json();
 }
 
-export async function createNews(news: News): Promise<Response> {
-  const response = await fetch((`${process.env.REACT_APP_API_URL}/News`), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(news),
+// CREATE News
+export const createNews = async (news: { title: string; content: string; imageData?: File }): Promise<void> => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+      alert("Et ole kirjautunut sisään!");
+      return;
+  }
+
+  let imageData = "";
+
+  if (news.imageData instanceof File) {
+      const reader = new FileReader();
+
+      const imagePromise = new Promise<string>((resolve) => {
+          reader.onload = () => {
+              const base64Data = reader.result?.toString().split(",")[1] || "";
+              resolve(base64Data);
+          };
+          reader.readAsDataURL(news.imageData as File);
+      });
+
+      imageData = await imagePromise;
+  }
+
+  const response = await fetch(`${API_URL}/News`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+          title: news.title,
+          content: news.content,
+          imageDataBase64: imageData || undefined
+      }),
   });
 
   if (!response.ok) {
-    throw new Error("Uutisen luonti epäonnistui");
+      const errorText = await response.text();
+      throw new Error(`Uutisen luonti epäonnistui: ${errorText}`);
+  }
+};
+
+// UPDATE News
+export const updateNews = async (id: number, title: string, content: string): Promise<void> => {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Et ole kirjautunut sisään!");
+    return;
   }
 
-  return response;
-}
+  const response = await fetch(`${API_URL}/News/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title, content }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Uutisen päivitys epäonnistui");
+    }
+};
+
+// DELETE News
+export const deleteNews = async (id: number): Promise<void> => {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Et ole kirjautunut sisään!");
+    return;
+  }
+
+  const response = await fetch(`${API_URL}/News/${id}`, {
+      method: "DELETE",
+      headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Uutisen poistaminen epäonnistui");
+  }
+};
