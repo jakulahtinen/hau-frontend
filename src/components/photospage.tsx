@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react";
 import { Picture } from "../interfaces/picture";
 import { fetchPictures } from "../api/picturesApi";
+import { Link } from "react-router-dom";
 import '../styles/photos.css';
 
 const Photospage = () => {
@@ -30,9 +31,13 @@ const Photospage = () => {
         <div className="photos-container">
             {photosList.map((photo: any) => (
                 <div className="photo-item" key={photo.id}>
-                    <img
-                    src={photo.imageData ? `data:image/jpeg;base64,${photo.imageData}` : 'default-image.jpg'}
-                    alt={photo.title} className="photo-image" />
+                    <Link to={`/photos/${photo.id}`} className="photo-link">
+                        <img
+                            src={photo.imageData ? `data:image/jpeg;base64,${photo.imageData}` : 'default-image.jpg'}
+                            alt={photo.title}
+                            className="photo-image"
+                        />
+                    </Link>
                     <h3 className="photo-title">{photo.title}</h3>
                 </div>
             ))}
