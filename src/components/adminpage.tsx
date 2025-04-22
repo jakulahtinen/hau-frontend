@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/admin.css";
-
-interface News {
-    id: number;
-    title: string;
-    content: string;
-    imageData?: string;
-}
+import Adminnav from "./adminnav";
+import { News } from "../interfaces/news";
+import { fetchNews, createNews, updateNews, deleteNews } from "../api/newsApi";
 
 const AdminPanel = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
@@ -16,23 +12,28 @@ const AdminPanel = () => {
     const [editId, setEditId] = useState<number | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccesMessage] = useState<string | null>(null);
 
-    // Fetch news from backend
-    const fetchNews = async () => {
+
+    const loadNews = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/News`);
-            if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
-            }
-            const data = await response.json();
+            setLoading(true);
+            const data = await fetchNews(); 
             setNewsList(data);
         } catch (err) {
-            console.error("Failed to fetch news:", err);
+            setError(err instanceof Error ? err.message : "Tuntematon virhe");
+        } finally {
+            setLoading(false);
+            if (loading) return <p>Ladataan uutisia...</p>;
+            if (error) return <p>Virhe: {error}</p>;
         }
-    };
+    }; 
 
     useEffect(() => {
-        fetchNews();
+        loadNews();
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,71 +50,48 @@ const AdminPanel = () => {
     const handleDeleteImage = () => {
         setImageFile(null);
         setImagePreview(null);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     };
+
 
     const handleAddNews = async () => {
         if (!title || !content) {
-          return alert("Täytä kaikki kentät!");
+            alert("Täytä kaikki kentät!");
+            return;
         }
-
-        let imageData = null;
-
-        if (imageFile) {
-            const reader = new FileReader();
-            reader.readAsDataURL(imageFile);
-
-            reader.onload = async () => {
-                imageData = reader.result?.toString().split(",")[1]; // Base64 data
-
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ title, content, imageData }),
-                });
-
-                if (response.ok) {
-                    fetchNews();
-                    setTitle("");
-                    setContent("");
-                    setImageFile(null);
-                    setImagePreview(null);
-                } else {
-                    alert("Failed to add news.");
-                }
-            };
-        } else {
-            // Send without image
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/News`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title, content, imageData: null }), // Image is null
-            });
-
-            if (response.ok) {
-                fetchNews();
-                setTitle("");
-                setContent("");
-                setImageFile(null);
-                setImagePreview(null);
-            } else {
-                alert("Failed to add news.");
+    
+        try {
+            await createNews({ title, content, imageData: imageFile ?? undefined });
+            setSuccesMessage("Uutinen lisatty onnistuneesti!");
+            setTimeout(() => {
+                setSuccesMessage(null);
+            }, 4000);
+            loadNews();
+            setTitle("");
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
             }
+            setContent("");
+            setImageFile(null);
+            setImagePreview(null);
+        } catch (error) {
+            alert("Uutisen lisääminen epäonnistui.");
         }
     };
-
+    
     const handleDeleteNews = async (id: number) => {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${id}`, {
-            method: "DELETE",
-        });
-
-        if (response.ok) {
-            fetchNews();
-        } else {
-            alert("Failed to delete news.");
+        try {
+            await deleteNews(id);
+            setSuccesMessage("Uutinen poistettu onnistuneesti!");
+            setTimeout(() => {  
+                setSuccesMessage(null);
+            }, 4000);
+            loadNews();
+        } catch (error) {
+            alert("Uutisen poistaminen epäonnistui.");
         }
     };
 
@@ -126,79 +104,103 @@ const AdminPanel = () => {
 
     const handleUpdateNews = async () => {
         if (!editId) return;
-
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/News/${editId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ title, content }),
-        });
-
-        if (response.ok) {
-            fetchNews();
+    
+        try {
+            await updateNews(editId, title, content);
             setEditMode(false);
             setEditId(null);
             setTitle("");
             setContent("");
-        } else {
-            alert("Failed to edit news.");
+
+            setSuccesMessage("Uutinen päivitetty onnistuneesti!");
+            setTimeout(() => {  
+                setSuccesMessage(null);
+            }, 4000);
+            loadNews();
+        } catch (error) {
+            alert("Failed to edit news. Please check your permissions.");
         }
     };
 
     return (
         <div className="admin-panel">
-            <h1>Admin Panel</h1>
+            <h1>Admin-Paneeli</h1>
+            <Adminnav/>
             <div className="add-news">
                 <h2>{editMode ? "Edit News" : "Add News"}</h2>
                 <input
                     type="text"
-                    placeholder="Title"
+                    placeholder="Otsikko"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <textarea
-                    placeholder="Content"
+                    placeholder="Sisältö..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                 />
-                <input type="file" accept="image/*" onChange={handleFileChange} />
+                <input
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                />
+
                 {imagePreview && (
                     <div>
-                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "200px", maxHeight: "200px", margin: "10px 0" }} />
-                        <button onClick={handleDeleteImage}>Delete Image</button>
+                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "50%", maxHeight: "50%", margin: "10px 0",  borderRadius: "15px"}} />
+                        <br />
+                        <button onClick={handleDeleteImage} className="delete-button" >Poista kuva</button>
                     </div>
                 )}
+                <br />
                 {editMode ? (
-                    <button onClick={handleUpdateNews}>Update</button>
+                    <button onClick={handleUpdateNews} className="update-button">Päivitä</button>
                 ) : (
-                    <button onClick={handleAddNews}>Publish</button>
+                    <button onClick={handleAddNews} className="publish-button">Julkaise</button>
                 )}
             </div>
             <div className="news-list">
-                <h2>Current News</h2>
+                <h2>Lisätyt Uutiset</h2>
                 {newsList.length === 0 ? (
-                    <p>No news.</p>
+                    <p>Ei uutisia.</p>
                 ) : (
                     <ul>
                         {newsList.map((news) => (
                             <li key={news.id}>
                                 <h3>{news.title}</h3>
-                                <p>{news.content}</p>
                                 {news.imageData && (
                                     <img
                                         src={`data:image/png;base64,${news.imageData}`}
                                         alt="News Image"
-                                        style={{ maxWidth: "200px", maxHeight: "200px" }}
+                                        style={{ maxWidth: "50%", maxHeight: "50%", borderRadius: "15px" }}
                                     />
                                 )}
-                                <button onClick={() => handleEditNews(news)}>Edit</button>
-                                <button onClick={() => handleDeleteNews(news.id)}>Delete</button>
+                                <p>{news.content}</p>
+                                <button onClick={() => handleEditNews(news)} className="edit-button">Muokkaa</button>
+                                <button onClick={() => handleDeleteNews(news.id)} className="deleteNews-button">Poista</button>
                             </li>
                         ))}
                     </ul>
                 )}
             </div>
+            {successMessage && (
+                <div style={{
+                    position: "fixed",
+                    bottom: "20px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    backgroundColor: "#d4edda",
+                    color: "#155724",
+                    padding: "12px 24px",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    zIndex: 9999,
+                    border: "1px solid #c3e6cb"
+                }}>
+                    {successMessage}
+                </div>
+            )}
         </div>
     );
 };

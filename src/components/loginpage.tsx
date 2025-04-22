@@ -6,8 +6,8 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,17 +18,22 @@ const LoginPage = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
+    
+                // Lähetetään storage-event, jotta Navbar huomaa tokenin päivityksen
+                window.dispatchEvent(new Event("storage"));
+    
                 navigate("/admin");
-                setLoading(false);
             } else {
                 setError("Kirjautuminen epäonnistui. Tarkista tiedot.");
             }
         } catch (err) {
             setError("Jotain meni pieleen.");
+        } finally {
+            setLoading(false);
         }
     };
 

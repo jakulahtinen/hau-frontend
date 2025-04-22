@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/news.css";
-
-interface News {
-    id: number;
-    title: string;
-    content: string;
-    imageData?: string;
-}
+import { News } from "../interfaces/news";
+import { fetchNews } from "../api/newsApi";
 
 const NewsPage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
@@ -14,14 +9,10 @@ const NewsPage = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchNews = async () => {
+        const loadNews = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/news`);
-                if (!response.ok) {
-                    throw new Error("Uutisten haku epäonnistui");
-                }
-                const data = await response.json();
+                const data = await fetchNews();
                 setNewsList(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
@@ -29,32 +20,37 @@ const NewsPage = () => {
                 setLoading(false);
             }
         };
-        fetchNews();
+        loadNews();
     }, []);
 
     if (loading) return <p>Ladataan uutisia...</p>;
     if (error) return <p>Virhe: {error}</p>;
 
     return (
-        <div className="news-page">
-            <h1>Uutiset</h1>
-            {newsList.length === 0 ? (
-                <p>Ei uutisia saatavilla.</p>
-            ) : (
-                newsList.map((news) => (
-                    <div key={news.id} className="news-item">
-                        <h2>{news.title}</h2>
-                        <p>{news.content}</p>
-                        {news.imageData && (
+        <div className="news-container">
+            {newsList.map((news: any) => (
+                <div className="news-item" key={news.id}>
+                    <div className="news-image">
+                        {news.imageData ? (
                             <img
-                                src={`data:image/png;base64,${news.imageData}`}
-                                alt="Uutisen kuva"
-                                style={{ maxWidth: "200px", maxHeight: "200px" }}
+                            src={news.imageData ? `data:image/jpeg;base64,${news.imageData}` : 'default-image.jpg'}
+                            alt={news.title}
                             />
+                        ) : (
+                            <div className="placeholder">Ei kuvaa</div>
                         )}
                     </div>
-                ))
-            )}
+                    <div className="news-content">
+                        <div className="news-title">
+                            <h3>{news.title}</h3>
+                        </div>
+                        <div className="news-summary">
+                            <p>{news.content.substring(0, 50)}...</p>
+                        </div>
+                        <a href={`/news/${news.id}`} className="read-more">Lue lisää</a>
+                    </div>
+                </div>
+            ))}
         </div>
     );
 };
