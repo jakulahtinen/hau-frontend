@@ -58,5 +58,4 @@ const PhotosDetailPage = () => {
     );
 }
 
-
 export default PhotosDetailPage;
