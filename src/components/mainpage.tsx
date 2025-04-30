@@ -46,31 +46,33 @@ const Mainpage = () => {
         ) : (
             <div className="latest-news">
             {newsList.map((news) => (
+            <Link to={`/news/${news.id}`} className="news-item-link">
                 <div key={news.id} className="news-item-frontpage">
-
-                    <Link to={`/news/${news.id}`} className="news-item-link">
-                        <h3>{news.title}</h3>
-                    </Link>
-
+                    <h3>{news.title}</h3>
+            
                     {news.imageData && (
-                        <Link to={`/news/${news.id}`} className="news-image-frontpage">
+                        <div className="news-image-frontpage">
                             <img
                                 src={`data:image/jpeg;base64,${news.imageData}`}
                                 alt={news.title}
                             />
-                        </Link>
+                        </div>
                     )}
-    
+            
                     <p>{news.content}</p>
                 </div>
+            </Link>
             ))}
-                {/* TÄHÄN KORJAUS ETTÄ VIERITTYY OIKEALLE KOHDALLE */}
-                <Link to="/events" className="read-more" style={{ fontSize: "large" }}>
-                    Lue lisää
-                </Link>
             </div>
         )}
+        <div className="read-more-wrapper">
+            <Link to="/events" className="read-more">
+                Lue lisää
+            </Link>
+        </div>
+        <br />
 
+        
         <h1>Kuka voi liittyä mukaan?</h1>
         <div className="whocanjoin">
             <p>Seuraamme kuuluu ja voi liittyä:</p>
