@@ -56,23 +56,38 @@
 
 /* News */
 .latest-news {
-    display: flex;
-    flex-direction: column;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     padding: 20px;
-    max-width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
     font-family: "Poppins", sans-serif;
 }
 
 .news-item-frontpage {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 1rem;
-    min-height: 15rem;
-    white-space: pre-line;
-    border-bottom: #ccc 2px solid;
+    gap: 0.5rem;
+    height: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+.news-item-frontpage:hover {
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+}
+
+.news-item-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .news-item-frontpage h3 {
@@ -85,25 +100,34 @@
     color: #555;
 }
 
+.read-more-wrapper {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+}
+
 .read-more {
-    display: block;
-    margin-top: 10px;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #007bff;
     text-decoration: none;
+    border: 2px solid #007bff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: 0.3s ease;
 }
+
+.read-more:hover {
+    background-color: #007bff;
+    color: white;
+}
+
 
 .news-image-frontpage img {
-    width: 80%; 
-    height: 80%; 
-    object-fit: cover; 
-    object-position: center; 
-    border-radius: 15px;
-}
-
-.news-image-frontpage img:hover {
-    transform: scale(1.05);
-    transition-duration: 0.5s;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 @media (max-width: 768px) {
@@ -119,6 +143,10 @@
         object-fit: cover; 
         object-position: center; 
         border-radius: 15px;
+    }
+
+    .latest-news {
+        grid-template-columns: 1fr;
     }
 }
 
