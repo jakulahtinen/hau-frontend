@@ -94,8 +94,8 @@
 }
 
 .news-image-frontpage img {
-    width: 70%; 
-    height: 70%; 
+    width: 80%; 
+    height: 80%; 
     object-fit: cover; 
     object-position: center; 
     border-radius: 15px;

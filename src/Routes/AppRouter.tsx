@@ -9,7 +9,6 @@ import Loginpage from "../components/loginpage";
 import Adminpanel from "../components/adminpage";
 import Addpicture from "../components/addpicture";
 import ProtectedRoute from "../components/protectedroute";
-import Photosdetailpage from "../components/photosdetailpage";
 
 const AppRouter = () => {
     return (
@@ -18,7 +17,6 @@ const AppRouter = () => {
             <Route path="/events" element={<Newspage />} />
             <Route path="news/:id" element={<Newsdetail />} ></Route>
             <Route path="/photos" element={<Photospage />} />
-            <Route path="/photos/:id" element={<Photosdetailpage />} ></Route>
             <Route path="/join" element={<Joinpage />} />
             <Route path="/contact" element={<Contactpage />} />
             <Route path="/login" element={<Loginpage />} />
