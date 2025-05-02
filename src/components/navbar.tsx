@@ -13,16 +13,11 @@ const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
-    const [spin, setSpin] = useState(false);
 
 
     const handleMenuToggle = () => {
         setMenuOpen((prev) => !prev);
-      
-        setSpin(true);
-        setTimeout(() => {
-          setSpin(false);
-        }, 400); 
+
       };
 
     useEffect(() => {
@@ -73,17 +68,15 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-container">
-            <div className="navbar-top">
-                {isMobile && (
-                    <div 
-                        className={`menu-icon ${spin ? "animate-spin" : ""}`} 
-                        onClick={handleMenuToggle}
-                    >
-                        <MenuIcon style={{ fontSize: "36px" }} />
-                    </div>
-                )}
-            </div>
-    
+            {isMobile && (
+                <div 
+                    className="menu-icon" 
+                    onClick={handleMenuToggle}
+                >
+                    <MenuIcon style={{ fontSize: "36px" }} />
+                </div>
+            )}
+
             {isMobile ? (
             <AnimatePresence>
                 {menuOpen && (

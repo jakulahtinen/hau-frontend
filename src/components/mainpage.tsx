@@ -82,7 +82,7 @@ const Mainpage = () => {
                 <li>• Mekaanikkoja</li>
                 <li>• Muuten lajista kiinnostuneita</li>
             </ul>
-            <p>Jäsenmäärämme on tällä hetkellä noin 180 henkilöä.</p>
+            <p>Jäsenmäärämme on tällä hetkellä noin 180.</p>
         </div>
         <h1>Lajit, joita tuemme</h1>
         <div className="supported">
