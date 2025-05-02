@@ -75,3 +75,9 @@
     border: 2px dashed #ccc;
     text-align: center;
 }
+
+@media (max-width: 768px) {
+    .news-item {
+        width: 100%;
+    }
+}

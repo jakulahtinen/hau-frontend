@@ -6,13 +6,13 @@ const Joinpage = () => (
     <div className="joinpage">
         <h1>Liity seuraan!</h1>
         <div className="jointext">
-            <p>Jos haluat liittyä Hirvensalmen Autourheilijoiden jäseneksi, ota yhteyttä sähköpostitse osoitteeseen hauinfonet@gmail.com</p>
+            <p>Jos haluat liittyä Hirvensalmen Autourheilijoiden jäseneksi, ota yhteyttä sähköpostitse osoitteeseen <b>hauinfonet@gmail.com</b></p>
             <p> Liitymistä varten tarvitsemme seuraavat tiedot:</p>
             <ul className="joininfo">
-                <li>• Nimi</li>
-                <li>• Syntymäaika</li>
-                <li>• Osoite</li>
-                <li>• Puhelinnumero</li>
+                <li>• <b>Nimi</b></li>
+                <li>• <b>Syntymäaika</b></li>
+                <li>• <b>Osoite</b></li>
+                <li>• <b>Puhelinnumero</b></li>
             </ul>
         </div>
         <h2>Seuran jäsenmaksut:</h2>
