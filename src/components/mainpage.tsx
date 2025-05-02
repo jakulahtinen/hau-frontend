@@ -29,16 +29,16 @@ const Mainpage = () => {
         <div className="mainpage">
         <h1>Tervetuloa seuramme sivuille!</h1>
         <h3>Yhdessä autourheilun parissa</h3>
-        <div className="mainpagewelcome">
-            <p>Seuramme tavoitteena on yhdistää autourheilusta kiinnostuneet ja edistää eri lajien harrastamista Hirvensalmella ja sen ympäristössä.</p>
-            <p> Järjestämme kilpailuja ja muita autoiluun liittyviä tapahtumia, jotka tarjoavat elämyksiä kaikille lajin ystäville.</p>
-        </div>
-        <div className="mainpagepicture">
-            <img src={mainpagepicture} alt="Main Picture" className="mainpagepicture" />
-            <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
-        </div>
+            <div className="mainpagewelcome">
+                <p>Seuramme tavoitteena on yhdistää autourheilusta kiinnostuneet ja edistää eri lajien harrastamista Hirvensalmella ja sen ympäristössä.</p>
+                <p> Järjestämme kilpailuja ja muita autoiluun liittyviä tapahtumia, jotka tarjoavat elämyksiä kaikille lajin ystäville.</p>
+            </div>
+            <div className="mainpagepicture">
+                <img src={mainpagepicture} alt="Main Picture" className="mainpagepicture" />
+                <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
+            </div>
 
-        <h1>Viimeisimmät uutiset</h1>
+        <h1 className="latest-news-title">Viimeisimmät uutiset</h1>
         {loading ? (
             <p>Ladataan...</p>
         ) : error ? (
@@ -97,9 +97,11 @@ const Mainpage = () => {
         <h3>Jäärata talvikaudella</h3>
         <div className="winter">
             <ul className="winterlist">
-                <li>• Ylläpidämme jäärataa, jossa järjestetään jäsentenvälisiä kilpailuja.</li>
-                <li>• Rataa voi vuokrata esimerkiksi autokerhojen talviharjoitteluun.</li>
-                <li>• Siviiliautot ovat myös tervetulleita harjoittelemaan radalle.</li>
+                <li>Ylläpidämme jäärataa, jossa järjestetään jäsentenvälisiä kilpailuja.</li>
+                <br />
+                <li>Rataa voi vuokrata esimerkiksi autokerhojen talviharjoitteluun.</li>
+                <br />
+                <li>Siviiliautot ovat myös tervetulleita harjoittelemaan radalle.</li>
             </ul>
         </div>
     </div>

@@ -68,15 +68,17 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-container">
-            {isMobile && (
-                <div 
-                    className="menu-icon" 
-                    onClick={handleMenuToggle}
-                >
-                    <MenuIcon style={{ fontSize: "36px" }} />
-                </div>
-            )}
-
+            <div className="navbar-top">
+                {isMobile && (
+                    <div 
+                        className="menu-icon" 
+                        onClick={handleMenuToggle}
+                    >
+                        <MenuIcon style={{ fontSize: "36px" }} />
+                    </div>
+                )}
+            </div>
+    
             {isMobile ? (
             <AnimatePresence>
                 {menuOpen && (
@@ -104,7 +106,7 @@ const Navbar = () => {
                                         <li><button onClick={handleLogout} ><LogoutIcon fontSize="medium" /></button></li>
                                     </>
                                 ) : (
-                                    <li><Link to="/login"><LoginIcon fontSize="medium" /></Link></li>
+                                    <li><button><Link to="/login" onClick={() => setMenuOpen(false)}><LoginIcon fontSize="medium" /></Link></button></li>
                                 )}
                             </div>
                         </ul>
