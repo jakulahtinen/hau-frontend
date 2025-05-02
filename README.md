@@ -19,7 +19,7 @@ This repository contains the frontend for the new website of a Hirvensalmen Auto
 ## Tech Stack
 
 - **Frontend**: TypeScript, React
-- **Backend**: C# (.NET) with SQL (managed in a separate repository)
+- **Backend**: C# (.NET) with PostgreSQL (managed in a separate repository)
 - **Styling**: CSS
 
 ## Publishing
