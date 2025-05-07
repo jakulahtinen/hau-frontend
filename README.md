@@ -26,8 +26,18 @@ This repository contains the frontend for the new website of a Hirvensalmen Auto
 
 - **Microsoft Azure**
   
-  
+
+ ## Front page 
 ![image](https://github.com/user-attachments/assets/4e8572bf-5373-47e4-a7c9-e58e59224db2)
+![Haufrontpage1](https://github.com/user-attachments/assets/1e1adc82-6d38-4769-b1df-8efb1e4f16ba)
+![Haufrontpage2](https://github.com/user-attachments/assets/5f842260-a7cb-4ef0-bac5-4a9b05628add)
+## News page
+![HauNews](https://github.com/user-attachments/assets/ab8919f8-4938-45b2-a657-c276f3427bfa)
+## Photos page
+![HauPhotos](https://github.com/user-attachments/assets/c68c97d0-12ac-4afa-9783-50bfd684b71a)
+## Admin page
+![HauAdmin](https://github.com/user-attachments/assets/57f1f57a-5e25-4961-b1d5-b58f0a7fdf06)
+
 
 Built with ❤️ by [Jaku]
 I am continuously learning new technologies and improving my skills while building this website!
