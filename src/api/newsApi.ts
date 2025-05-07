@@ -21,13 +21,6 @@ export const fetchNews = async (): Promise<News[]> => {
   return sortedNews;
 };
 
-// GET Single News
-export const fetchSingleNews = async (id: number): Promise<News> => {
-  const response = await fetch(`${API_URL}/News/${id}`);
-  if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-  return response.json();
-}
-
 // CREATE News
 export const createNews = async (news: { title: string; content: string; imageData?: File }): Promise<void> => {
   const token = localStorage.getItem("token");

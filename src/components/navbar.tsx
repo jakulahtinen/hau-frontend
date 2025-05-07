@@ -13,17 +13,11 @@ const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
-    const menuRef = useRef<HTMLUListElement | null>(null);
-    const [spin, setSpin] = useState(false);
 
 
     const handleMenuToggle = () => {
         setMenuOpen((prev) => !prev);
-      
-        setSpin(true);
-        setTimeout(() => {
-          setSpin(false);
-        }, 400); 
+
       };
 
     useEffect(() => {
@@ -77,7 +71,7 @@ const Navbar = () => {
             <div className="navbar-top">
                 {isMobile && (
                     <div 
-                        className={`menu-icon ${spin ? "animate-spin" : ""}`} 
+                        className="menu-icon" 
                         onClick={handleMenuToggle}
                     >
                         <MenuIcon style={{ fontSize: "36px" }} />
@@ -112,7 +106,7 @@ const Navbar = () => {
                                         <li><button onClick={handleLogout} ><LogoutIcon fontSize="medium" /></button></li>
                                     </>
                                 ) : (
-                                    <li><Link to="/login"><LoginIcon fontSize="medium" /></Link></li>
+                                    <li><button><Link to="/login" onClick={() => setMenuOpen(false)}><LoginIcon fontSize="medium" /></Link></button></li>
                                 )}
                             </div>
                         </ul>

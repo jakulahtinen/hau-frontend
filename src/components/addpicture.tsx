@@ -125,13 +125,15 @@ const AddPicture = () => {
                  onChange={handleFileChange} 
                  ref={fileInputRef}
                 />
+
                 {imagePreview && (
                     <div>
-                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "50%", maxHeight: "50%", margin: "10px 0", borderRadius: "15px" }} />
+                        <img src={imagePreview} alt="Preview" className="add-preview-image"/>
                         <br />
                         <button onClick={handleDeleteImage} className="delete-picture">Poista kuva</button>
                     </div>
                 )}
+
                 <textarea
                 placeholder="Kuvateksti..."
                 value={title}
@@ -151,12 +153,11 @@ const AddPicture = () => {
                     <ul>
                         {pictures.map((picture) => (
                             <li key={picture.id}>
-
                                 {picture.imageData && (
                                     <img
                                         src={`data:image/png;base64,${picture.imageData}`}
                                         alt="News Image"
-                                        style={{ maxWidth: "50%", maxHeight: "50%" }}
+                                        className="add-images-admin"
                                     />
                                 )}
                                 <p>{picture.title}</p>

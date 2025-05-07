@@ -71,7 +71,10 @@
     transition: transform 0.2s;
     white-space: pre-line;
 }
-
+.latest-news-title {
+    border-bottom: #ccc 2px solid;
+    width: 100%;
+}
 .imagePreview {
     width: 100%;
     display: flex;

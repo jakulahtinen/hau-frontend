@@ -1,52 +1,31 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import { fetchSingleNews } from "../api/newsApi";
 import "../styles/newsdetail.css";
+import { fetchNews } from "../api/newsApi";
 
 const NewsDetail = () => {
-    const { id } = useParams<{ id: string }>(); 
+    const { id } = useParams(); 
     const [news, setNews] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const newsRef = useRef<HTMLDivElement>(null); 
 
     useEffect(() => {
-        const fetchNews = async () => {
+        const loadNews = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/news/${id}`);
-                if (!response.ok) {
-                    throw new Error("Uutisen haku epäonnistui");
-                }
-                const data = await response.json();
-                setNews(data);
+                setLoading(true);
+                const data = await fetchNews();
+                const found = data.find((news: any) => news.id === parseInt(id!));
+                setNews(found || null);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Tuntematon virhe");
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchNews();
+        loadNews();
     }, [id]);
-
-    // useEffect(() => {
-    //     const loadNews = async () => {
-    //         try {
-    //             const data = await fetchSingleNews(id);
-    //             setNews(data); 
-    //         } catch (err) {
-    //             setError(err instanceof Error ? err.message : "Tuntematon virhe");
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     loadNews();
-    // }, [id]);
-
-
-
 
     useEffect(() => {
         if (news) {
@@ -69,7 +48,7 @@ const NewsDetail = () => {
                 <>
                     <div className="news-header">
                         <Link to="/events">
-                            <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" />
+                            <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" style={{ color: "black" }}/>
                         </Link>
                     </div>
                     <h1>{news.title}</h1>

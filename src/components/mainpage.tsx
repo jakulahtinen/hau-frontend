@@ -9,7 +9,26 @@ const Mainpage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [fade, setFade] = useState(true);
 
+
+    // Fade the news to next one in every 30 seconds.
+    useEffect(() => {
+        if (!newsList || newsList.length === 0) return;
+      
+        const interval = setInterval(() => {
+          setFade(false); 
+          setTimeout(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % newsList.length);
+            setFade(true);
+          }, 300); 
+        }, 30000);
+      
+        return () => clearInterval(interval);
+    }, [newsList]);
+
+    // Fetch news from API
     useEffect(() => {
         const loadNews = async () => {
             try {
@@ -29,48 +48,62 @@ const Mainpage = () => {
         <div className="mainpage">
         <h1>Tervetuloa seuramme sivuille!</h1>
         <h3>Yhdessä autourheilun parissa</h3>
-        <div className="mainpagewelcome">
-            <p>Seuramme tavoitteena on yhdistää autourheilusta kiinnostuneet ja edistää eri lajien harrastamista Hirvensalmella ja sen ympäristössä.</p>
-            <p> Järjestämme kilpailuja ja muita autoiluun liittyviä tapahtumia, jotka tarjoavat elämyksiä kaikille lajin ystäville.</p>
-        </div>
-        <div className="mainpagepicture">
-            <img src={mainpagepicture} alt="Main Picture" className="mainpagepicture" />
-            <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
-        </div>
-
-        <h1>Viimeisimmät uutiset</h1>
-        {loading ? (
-            <p>Ladataan...</p>
-        ) : error ? (
-            <p style={{ color: "red" }}>{error}</p>
-        ) : (
-            <div className="latest-news">
-            {newsList.map((news) => (
-                <div key={news.id} className="news-item-frontpage">
-
-                    <Link to={`/news/${news.id}`} className="news-item-link">
-                        <h3>{news.title}</h3>
-                    </Link>
-
-                    {news.imageData && (
-                        <Link to={`/news/${news.id}`} className="news-image-frontpage">
-                            <img
-                                src={`data:image/jpeg;base64,${news.imageData}`}
-                                alt={news.title}
-                            />
-                        </Link>
-                    )}
-    
-                    <p>{news.content}</p>
-                </div>
-            ))}
-                {/* TÄHÄN KORJAUS ETTÄ VIERITTYY OIKEALLE KOHDALLE */}
-                <Link to="/events" className="read-more" style={{ fontSize: "large" }}>
-                    Lue lisää
-                </Link>
+            <div className="mainpagewelcome">
+                <p>Seuramme tavoitteena on yhdistää autourheilusta kiinnostuneet ja edistää eri lajien harrastamista Hirvensalmella ja sen ympäristössä.</p>
+                <p> Järjestämme kilpailuja ja muita autoiluun liittyviä tapahtumia, jotka tarjoavat elämyksiä kaikille lajin ystäville.</p>
             </div>
-        )}
+            <div className="mainpagepicture">
+                <img src={mainpagepicture} alt="Main Picture" className="mainpagepicture" />
+                <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
+            </div>
 
+            <h1 className="latest-news-title">Viimeisimmät uutiset</h1>
+            {loading ? (
+            <p>Ladataan...</p>
+            ) : error ? (
+            <p style={{ color: "red" }}>{error}</p>
+            ) : newsList.length > 0 ? (
+            <div className="latest-news-carousel">
+                <Link to={`/news/${newsList[currentIndex].id}`} className="news-item-link">
+                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : ""}`}>
+                    <div className="news-title">
+                        <h3>{newsList[currentIndex].title}</h3>
+                    </div>
+                    {newsList[currentIndex].imageData && (
+                    <div className="news-image-frontpage">
+                        <img
+                        src={`data:image/jpeg;base64,${newsList[currentIndex].imageData}`}
+                        alt={newsList[currentIndex].title}
+                        className="main-news-image"
+                        />
+                    </div>
+                    )}
+                    <div className="news-content">
+                        <p>{newsList[currentIndex].content}</p>
+                    </div>
+                </div>
+                </Link>
+
+                <div className="carousel-indicators">
+                {/* Indicators*/}
+                {newsList.map((_, index) => (
+                    <span
+                    key={index}
+                    className={`indicator-dot ${index === currentIndex ? "active" : ""}`}
+                    onClick={() => setCurrentIndex(index)}
+                    />
+                ))}
+                </div>
+            </div>
+            ) : null}
+        <div className="read-more-wrapper">
+            <Link to="/events" className="read-more">
+                Lue lisää
+            </Link>
+        </div>
+        <br />
+
+        {/*Bottom text-area */}
         <h1>Kuka voi liittyä mukaan?</h1>
         <div className="whocanjoin">
             <p>Seuraamme kuuluu ja voi liittyä:</p>
@@ -80,7 +113,7 @@ const Mainpage = () => {
                 <li>• Mekaanikkoja</li>
                 <li>• Muuten lajista kiinnostuneita</li>
             </ul>
-            <p>Jäsenmäärämme on tällä hetkellä noin 180 henkilöä.</p>
+            <p>Jäsenmäärämme on tällä hetkellä noin 180.</p>
         </div>
         <h1>Lajit, joita tuemme</h1>
         <div className="supported">
@@ -95,9 +128,11 @@ const Mainpage = () => {
         <h3>Jäärata talvikaudella</h3>
         <div className="winter">
             <ul className="winterlist">
-                <li>• Ylläpidämme jäärataa, jossa järjestetään jäsentenvälisiä kilpailuja.</li>
-                <li>• Rataa voi vuokrata esimerkiksi autokerhojen talviharjoitteluun.</li>
-                <li>• Siviiliautot ovat myös tervetulleita harjoittelemaan radalle.</li>
+                <li>Ylläpidämme jäärataa, jossa järjestetään jäsentenvälisiä kilpailuja.</li>
+                <br />
+                <li>Rataa voi vuokrata esimerkiksi autokerhojen talviharjoitteluun.</li>
+                <br />
+                <li>Siviiliautot ovat myös tervetulleita harjoittelemaan radalle.</li>
             </ul>
         </div>
     </div>

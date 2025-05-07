@@ -1,6 +1,11 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+.added-news-text {
+    border-bottom: #ccc 2px solid;
+    padding: 10px;
+}
+
 .adminnavbar {
     display: flex;
     justify-content: space-around; 
@@ -33,6 +38,20 @@
     color: #007bff; 
 }
 
+
+/* IMAGES */
+.news-image-admin {
+    max-width: 50%;
+    max-height: 50%;
+    border-radius: 5px;
+}
+
+.preview-image {
+    max-width: 50%;
+    max-height: 50%;
+    border-radius: 5px;
+}
+
 /* Responsive for mobile screen */
 @media (max-width: 768px) {
     .adminnavbar {
@@ -42,5 +61,19 @@
 
     .adminnavbar a {
         margin: 10px 0; 
+    }
+
+    .edit-button, .delete-button, .publish-button, .deleteNews-button {
+        width: 50%;
+    }
+
+    .news-image-admin {
+        max-width: 100%; 
+        max-height: 100%; 
+    }
+
+    .preview-image {
+        max-width: 100%; 
+        max-height: 100%;
     }
 }

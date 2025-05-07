@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/news.css";
 import { News } from "../interfaces/news";
 import { fetchNews } from "../api/newsApi";
@@ -7,6 +7,8 @@ const NewsPage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const navRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const loadNews = async () => {
@@ -23,11 +25,23 @@ const NewsPage = () => {
         loadNews();
     }, []);
 
+    useEffect(() => {
+        if (newsList) {
+            setTimeout(() => {
+                const navbarHeight = document.querySelector(".navbar")?.clientHeight || 80; 
+                const offset = navbarHeight + 50; 
+                const top = navRef.current!.getBoundingClientRect().top + window.scrollY - offset;
+    
+                window.scrollTo({ top, behavior: "smooth" });
+            }, 200);
+        }
+    }, [newsList]);
+
     if (loading) return <p>Ladataan uutisia...</p>;
     if (error) return <p>Virhe: {error}</p>;
 
     return (
-        <div className="news-container">
+        <div className="news-container" ref={navRef}>
             {newsList.map((news: any) => (
                 <div className="news-item" key={news.id}>
                     <div className="news-image">

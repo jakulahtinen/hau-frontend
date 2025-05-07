@@ -127,7 +127,7 @@ const AdminPanel = () => {
             <h1>Admin-Paneeli</h1>
             <Adminnav/>
             <div className="add-news">
-                <h2>{editMode ? "Edit News" : "Add News"}</h2>
+                <h2>{editMode ? "Muokkaa uutista" : "Lisää uutinen"}</h2>
                 <input
                     type="text"
                     placeholder="Otsikko"
@@ -148,7 +148,7 @@ const AdminPanel = () => {
 
                 {imagePreview && (
                     <div>
-                        <img src={imagePreview} alt="Preview" style={{ maxWidth: "50%", maxHeight: "50%", margin: "10px 0",  borderRadius: "15px"}} />
+                        <img src={imagePreview} alt="Preview" className="preview-image" />
                         <br />
                         <button onClick={handleDeleteImage} className="delete-button" >Poista kuva</button>
                     </div>
@@ -161,7 +161,7 @@ const AdminPanel = () => {
                 )}
             </div>
             <div className="news-list">
-                <h2>Lisätyt Uutiset</h2>
+                <h2 className="added-news-text">Lisätyt Uutiset</h2>
                 {newsList.length === 0 ? (
                     <p>Ei uutisia.</p>
                 ) : (
@@ -173,7 +173,7 @@ const AdminPanel = () => {
                                     <img
                                         src={`data:image/png;base64,${news.imageData}`}
                                         alt="News Image"
-                                        style={{ maxWidth: "50%", maxHeight: "50%", borderRadius: "15px" }}
+                                        className="news-image-admin"
                                     />
                                 )}
                                 <p>{news.content}</p>
