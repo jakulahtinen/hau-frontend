@@ -9,7 +9,26 @@ const Mainpage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [fade, setFade] = useState(true);
 
+
+    // Fade the news to next one in every 30 seconds.
+    useEffect(() => {
+        if (!newsList || newsList.length === 0) return;
+      
+        const interval = setInterval(() => {
+          setFade(false); 
+          setTimeout(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % newsList.length);
+            setFade(true);
+          }, 300); 
+        }, 30000);
+      
+        return () => clearInterval(interval);
+    }, [newsList]);
+
+    // Fetch news from API
     useEffect(() => {
         const loadNews = async () => {
             try {
@@ -38,33 +57,45 @@ const Mainpage = () => {
                 <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
             </div>
 
-        <h1 className="latest-news-title">Viimeisimmät uutiset</h1>
-        {loading ? (
+            <h1 className="latest-news-title">Viimeisimmät uutiset</h1>
+            {loading ? (
             <p>Ladataan...</p>
-        ) : error ? (
+            ) : error ? (
             <p style={{ color: "red" }}>{error}</p>
-        ) : (
-            <div className="latest-news">
-            {newsList.map((news) => (
-            <Link to={`/news/${news.id}`} className="news-item-link">
-                <div key={news.id} className="news-item-frontpage">
-                    <h3>{news.title}</h3>
-            
-                    {news.imageData && (
-                        <div className="news-image-frontpage">
-                            <img
-                                src={`data:image/jpeg;base64,${news.imageData}`}
-                                alt={news.title}
-                            />
-                        </div>
+            ) : newsList.length > 0 ? (
+            <div className="latest-news-carousel">
+                <Link to={`/news/${newsList[currentIndex].id}`} className="news-item-link">
+                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : ""}`}>
+                    <div className="news-title">
+                        <h3>{newsList[currentIndex].title}</h3>
+                    </div>
+                    {newsList[currentIndex].imageData && (
+                    <div className="news-image-frontpage">
+                        <img
+                        src={`data:image/jpeg;base64,${newsList[currentIndex].imageData}`}
+                        alt={newsList[currentIndex].title}
+                        className="main-news-image"
+                        />
+                    </div>
                     )}
-            
-                    <p>{news.content}</p>
+                    <div className="news-content">
+                        <p>{newsList[currentIndex].content}</p>
+                    </div>
                 </div>
-            </Link>
-            ))}
+                </Link>
+
+                <div className="carousel-indicators">
+                {/* Indicators*/}
+                {newsList.map((_, index) => (
+                    <span
+                    key={index}
+                    className={`indicator-dot ${index === currentIndex ? "active" : ""}`}
+                    onClick={() => setCurrentIndex(index)}
+                    />
+                ))}
+                </div>
             </div>
-        )}
+            ) : null}
         <div className="read-more-wrapper">
             <Link to="/events" className="read-more">
                 Lue lisää
@@ -72,7 +103,7 @@ const Mainpage = () => {
         </div>
         <br />
 
-        
+        {/*Bottom text-area */}
         <h1>Kuka voi liittyä mukaan?</h1>
         <div className="whocanjoin">
             <p>Seuraamme kuuluu ja voi liittyä:</p>
