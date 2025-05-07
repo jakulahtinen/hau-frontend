@@ -46,3 +46,10 @@
 .back-button:hover {
     text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+    .news-detail-image {
+        width: 80%;
+        height: 80%;
+    }
+}
