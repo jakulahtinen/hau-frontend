@@ -86,7 +86,6 @@ const AddPicture = () => {
             }, 4000);
             loadPictures();
         } catch (error) {
-            console.error("Error updating caption:", error);
             alert("Kuvatekstin muokkaaminen epäonnistui.");
         }
     };
@@ -108,14 +107,13 @@ const AddPicture = () => {
             }, 4000);
             loadPictures();
         } catch (error) {
-            console.error("Error deleting picture:", error);
             alert("Kuvan poistaminen epäonnistui.");
         }
     };
 
     return (
         <div className="admin-panel">
-            <h1>Admin Panel</h1>
+            <h1>Hallintapaneeli</h1>
             <Adminnav />
             <div className="add-picture">
                 <h2>Lisää uusi kuva</h2>
