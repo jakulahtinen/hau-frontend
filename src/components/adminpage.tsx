@@ -124,7 +124,7 @@ const AdminPanel = () => {
 
     return (
         <div className="admin-panel">
-            <h1>Admin-Paneeli</h1>
+            <h1>Hallintapaneeli</h1>
             <Adminnav/>
             <div className="add-news">
                 <h2>{editMode ? "Muokkaa uutista" : "Lisää uutinen"}</h2>
