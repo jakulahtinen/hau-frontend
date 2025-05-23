@@ -27,6 +27,15 @@ const NewsDetail = () => {
         loadNews();
     }, [id]);
 
+    const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+        return new Date(dateString).toLocaleDateString("fi-FI", options);
+    };
+
     useEffect(() => {
         if (news) {
             setTimeout(() => {
@@ -52,6 +61,7 @@ const NewsDetail = () => {
                         </Link>
                     </div>
                     <h1>{news.title}</h1>
+                    <p className="news-date">{formatDate(news.publishedAt)}</p>
                     {news.imageData && (
                         <img
                             src={`data:image/jpeg;base64,${news.imageData}`}

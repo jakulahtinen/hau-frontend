@@ -44,6 +44,15 @@ const Mainpage = () => {
         loadNews();
     }, []);
 
+    const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+        return new Date(dateString).toLocaleDateString("fi-FI", options);
+    };
+
     return (
         <div className="mainpage">
         <h1>Tervetuloa seuramme sivuille!</h1>
@@ -68,6 +77,7 @@ const Mainpage = () => {
                 <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : ""}`}>
                     <div className="news-title">
                         <h3>{newsList[currentIndex].title}</h3>
+                        <p className="news-date">{formatDate(newsList[currentIndex].publishedAt ?? "")}</p>
                     </div>
                     {newsList[currentIndex].imageData && (
                     <div className="news-image-frontpage">

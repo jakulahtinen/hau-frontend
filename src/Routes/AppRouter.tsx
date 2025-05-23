@@ -8,6 +8,8 @@ import Newsdetail from "../components/newsdetail";
 import Loginpage from "../components/loginpage";
 import Adminpanel from "../components/adminpage";
 import Addpicture from "../components/addpicture";
+import Scorespage from "../components/scorespage";
+import Addscores from "../components/addscores";
 import ProtectedRoute from "../components/protectedroute";
 
 const AppRouter = () => {
@@ -15,6 +17,7 @@ const AppRouter = () => {
         <Routes>
             <Route path="/" element={<Mainpage />} />
             <Route path="/events" element={<Newspage />} />
+            <Route path="/scores" element={<Scorespage />} />
             <Route path="news/:id" element={<Newsdetail />} ></Route>
             <Route path="/photos" element={<Photospage />} />
             <Route path="/join" element={<Joinpage />} />
@@ -23,6 +26,7 @@ const AppRouter = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path="/admin" element={<Adminpanel />} />
                 <Route path="/addpicture" element={<Addpicture />} />
+                <Route path="/addscores" element={<Addscores />} />
             </Route>
         </Routes>
     );

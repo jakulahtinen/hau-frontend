@@ -28,11 +28,13 @@ const NewsPage = () => {
     useEffect(() => {
         if (newsList) {
             setTimeout(() => {
-                const navbarHeight = document.querySelector(".navbar")?.clientHeight || 80; 
-                const offset = navbarHeight + 50; 
-                const top = navRef.current!.getBoundingClientRect().top + window.scrollY - offset;
-    
-                window.scrollTo({ top, behavior: "smooth" });
+                if (navRef.current) {
+                    const navbarHeight = document.querySelector(".navbar")?.clientHeight || 80; 
+                    const offset = navbarHeight + 50; 
+                    const top = navRef.current.getBoundingClientRect().top + window.scrollY - offset;
+
+                    window.scrollTo({ top, behavior: "smooth" });
+                }
             }, 200);
         }
     }, [newsList]);

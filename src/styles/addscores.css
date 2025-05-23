@@ -12,7 +12,8 @@
     padding: 20px;
 }
 
-.add-news {
+.add-scores {
+    font-family: 'Poppins', sans-serif;
     width: 100%;
     margin-bottom: 20px;
     display: flex;
@@ -21,7 +22,7 @@
     justify-content: center;
 }
 
-.add-news input {
+.add-scores input {
     width: 100%;
     max-width: 400px;
     margin: 10px 0;
@@ -30,7 +31,7 @@
     border-radius: 5px;
 }
 
-.add-news textarea {
+.add-scores textarea {
     width: 100%;
     max-width: 400px;
     height: 200px;
@@ -40,7 +41,7 @@
     border-radius: 5px;
 }
 
-.add-news button {
+.add-scores button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -49,16 +50,23 @@
     cursor: pointer;
 }
 
-.add-news button:hover {
+.add-scores button:hover {
     background-color: #0056b3;
 }
 
-.news-list ul {
+.scores-list {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+}
+
+.scores-list ul {
     list-style: none;
     padding: 0;
 }
 
-.news-list li {
+.scores-list li {
     width: 100%;
     border-bottom: #ccc 2px solid;
     margin: 10px 0;
@@ -72,18 +80,19 @@
     white-space: pre-line;
 }
 
-.added-news-text {
+.scores-list,
+.scores-list ul,
+.scores-list li {
+    border-right: none !important;
+    box-shadow: none !important;
+}
+
+.scores-title {
     border-bottom: #ccc 2px solid;
     width: 100%;
 }
 
-.imagePreview {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.delete-button, .publish-button, .edit-button, .deleteNews-button  {
+.delete-button, .publish-button, .editScores-button, .deleteScores-button  {
     width: 25%;
     background-color: #007bff;
     color: white;
@@ -92,4 +101,16 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-group button {
+  flex: 1 1 120px;
+  max-width: 200px;
 }
