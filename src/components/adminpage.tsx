@@ -17,7 +17,7 @@ const AdminPanel = () => {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccesMessage] = useState<string | null>(null);
 
-
+    // Fetch news
     const loadNews = async () => {
         try {
             setLoading(true);
@@ -36,6 +36,7 @@ const AdminPanel = () => {
         loadNews();
     }, []);
 
+    // Image preview
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setImageFile(e.target.files[0]);
@@ -47,6 +48,7 @@ const AdminPanel = () => {
         }
     };
 
+    // Delete image
     const handleDeleteImage = () => {
         setImageFile(null);
         setImagePreview(null);
@@ -56,7 +58,7 @@ const AdminPanel = () => {
         }
     };
 
-
+    // Add news
     const handleAddNews = async () => {
         if (!title || !content) {
             alert("Täytä kaikki kentät!");
@@ -65,7 +67,7 @@ const AdminPanel = () => {
     
         try {
             await createNews({ title, content, imageData: imageFile ?? undefined });
-            setSuccesMessage("Uutinen lisatty onnistuneesti!");
+            setSuccesMessage("Uutinen lisätty onnistuneesti!");
             setTimeout(() => {
                 setSuccesMessage(null);
             }, 4000);
@@ -82,6 +84,7 @@ const AdminPanel = () => {
         }
     };
     
+    // Delete news
     const handleDeleteNews = async (id: number) => {
         try {
             await deleteNews(id);
@@ -95,6 +98,7 @@ const AdminPanel = () => {
         }
     };
 
+    // Edit news
     const handleEditNews = (news: News) => {
         setEditMode(true);
         setEditId(news.id);
@@ -102,6 +106,7 @@ const AdminPanel = () => {
         setContent(news.content);
     };
 
+    // Update news
     const handleUpdateNews = async () => {
         if (!editId) return;
     
@@ -118,7 +123,7 @@ const AdminPanel = () => {
             }, 4000);
             loadNews();
         } catch (error) {
-            alert("Failed to edit news. Please check your permissions.");
+            alert("Uutisen muokkaaminen epäonnistui.");
         }
     };
 

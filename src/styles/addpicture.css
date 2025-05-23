@@ -7,10 +7,6 @@
     justify-content: center;
 }
 
-.add-picture h2 {
-    color: #333;
-}
-
 .add-picture input[type="file"] {
     width: 100%;
     max-width: 400px;
