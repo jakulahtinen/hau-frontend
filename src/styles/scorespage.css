@@ -68,3 +68,20 @@
     font-size: 1.1em;
     line-height: 2.5;
 }
+
+@media (max-width: 768px) {
+    .scores-container {
+        flex-direction: column;
+    }
+
+    .scorespage-list,
+    .scores-details {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #ccc;
+    }
+
+    .scores-details {
+        border-top: none;
+    }
+}

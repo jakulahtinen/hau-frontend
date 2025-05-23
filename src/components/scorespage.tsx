@@ -79,7 +79,7 @@ const Scorespage = () => {
                                 </p>
                         </div>
                     ) : (
-                        <p>Valitse tulos vasemmalta nähdäksesi sisällön.</p>
+                        <p>Valitse tulos nähdäksesi sisällön.</p>
                     )}
             </div>
         </div>
