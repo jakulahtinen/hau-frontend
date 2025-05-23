@@ -37,6 +37,9 @@ This repository contains the frontend for the new website of a Hirvensalmen Auto
 ![HauPhotos](https://github.com/user-attachments/assets/c68c97d0-12ac-4afa-9783-50bfd684b71a)
 ## Admin page
 ![HauAdmin](https://github.com/user-attachments/assets/57f1f57a-5e25-4961-b1d5-b58f0a7fdf06)
+## Scores page
+![HauScores](https://github.com/user-attachments/assets/a6d3b466-2c0c-43b0-b188-63b4ef4874c5)
+
 
 
 Built with ❤️ by [Jaku]
