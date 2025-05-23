@@ -3,5 +3,5 @@ export interface News {
     title: string;
     content: string;
     imageData?: string;
-    publishedAt?: Date;
+    publishedAt?: string;
 }

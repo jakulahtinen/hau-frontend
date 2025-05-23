@@ -47,6 +47,12 @@
     text-decoration: underline;
 }
 
+.news-date {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 15px;
+}
+
 @media (max-width: 768px) {
     .news-detail-image {
         width: 80%;

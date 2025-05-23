@@ -96,6 +96,7 @@ const Navbar = () => {
                         >
                             <li><Link to="/" onClick={() => setMenuOpen(false)}>Etusivu</Link></li>
                             <li><Link to="/events" onClick={() => setMenuOpen(false)}>Uutiset</Link></li>
+                            <li><Link to="/scores" onClick={() => setMenuOpen(false)}>Tulokset</Link></li>
                             <li><Link to="/photos" onClick={() => setMenuOpen(false)}>Kuvat</Link></li>
                             <li><Link to="/join" onClick={() => setMenuOpen(false)}>Liity</Link></li>
                             <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Yhteystiedot</Link></li>
@@ -117,6 +118,7 @@ const Navbar = () => {
                 <ul className="navbar desktop">
                     <li><Link to="/">Etusivu</Link></li>
                     <li><Link to="/events">Uutiset</Link></li>
+                    <li><Link to="/scores">Tulokset</Link></li>
                     <li><Link to="/photos">Kuvat</Link></li>
                     <li><Link to="/join">Liity</Link></li>
                     <li><Link to="/contact">Yhteystiedot</Link></li>
