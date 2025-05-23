@@ -8,17 +8,16 @@
     border-radius: 15px;
 }
 
-.scores-list {
-    width: 10%;
+.scorespage-list {
+    width: 40%;
     border-right: 2px solid #ccc;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
-    background-color: #f9f9f9;
 }
 
 .scores-details {
-    width: 90%;
+    width: 60%;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
