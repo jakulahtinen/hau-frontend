@@ -11,7 +11,7 @@ const Mainpage = () => {
     const [error, setError] = useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [fade, setFade] = useState(true);
-
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
     // Fade the news to next one in every 30 seconds.
     useEffect(() => {
@@ -27,6 +27,27 @@ const Mainpage = () => {
       
         return () => clearInterval(interval);
     }, [newsList]);
+
+
+    // Touch swipe events
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStartX(e.touches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (touchStartX === null) return;
+        const touchEndX = e.touches[0].clientX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+            setCurrentIndex((prev) => (prev + 1) % newsList.length);
+        } else {
+            setCurrentIndex((prev) => (prev - 1 + newsList.length) % newsList.length);
+        }
+        setTouchStartX(null);
+        }
+    };
 
     // Fetch news from API
     useEffect(() => {
@@ -72,8 +93,32 @@ const Mainpage = () => {
             ) : error ? (
             <p style={{ color: "red" }}>{error}</p>
             ) : newsList.length > 0 ? (
-            <div className="latest-news-carousel">
-                <Link to={`/news/${newsList[currentIndex].id}`} className="news-item-link">
+            <div 
+            className="latest-news-carousel"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            >
+                <div
+                    className="carousel-arrow left"
+                    onClick={() =>
+                        setCurrentIndex((prev) =>
+                            prev === 0 ? newsList.length - 1 : prev - 1
+                        )
+                    }
+                >
+                    ‹
+                </div>
+                <div
+                    className="carousel-arrow right"
+                    onClick={() =>
+                        setCurrentIndex((prev) =>
+                            (prev + 1) % newsList.length
+                        )
+                    }
+                >
+                    ›
+                </div>
+                <Link to={`/news/${newsList[currentIndex].id}`} state={{ from: "mainpage" }} className="news-item-link">
                 <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : ""}`}>
                     <div className="news-title">
                         <h3>{newsList[currentIndex].title}</h3>

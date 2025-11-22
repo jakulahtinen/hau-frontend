@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../styles/news.css";
 import { News } from "../interfaces/news";
 import { fetchNews } from "../api/newsApi";
+import { Link } from "react-router-dom";
 
 const NewsPage = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
@@ -63,7 +64,7 @@ const NewsPage = () => {
                         <div className="news-summary">
                             <p>{news.content.substring(0, 50)}...</p>
                         </div>
-                        <a href={`/news/${news.id}`} className="read-more">Lue lisää</a>
+                        <Link to={`/news/${news.id}`} state={{ from: "events" }} className="read-more">Lue lisää</Link>
                     </div>
                 </div>
             ))}

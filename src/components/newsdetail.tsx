@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import "../styles/newsdetail.css";
 import { fetchNews } from "../api/newsApi";
@@ -9,7 +9,9 @@ const NewsDetail = () => {
     const [news, setNews] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const newsRef = useRef<HTMLDivElement>(null); 
+    const newsRef = useRef<HTMLDivElement>(null);
+    const location = useLocation();
+    const backLink = location.state?.from === "events" ? "/events" : "/";
 
     useEffect(() => {
         const loadNews = async () => {
@@ -56,7 +58,7 @@ const NewsDetail = () => {
             {news ? (
                 <>
                     <div className="news-header">
-                        <Link to="/events">
+                        <Link to={backLink}>
                             <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" style={{ color: "black" }}/>
                         </Link>
                     </div>
