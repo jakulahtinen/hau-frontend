@@ -12,7 +12,7 @@ const Contactpage = () => (
             <p>050 0982 867 Kari Liimatainen</p>
             <p>hauinfonet@gmail.com</p>
         </div>
-        <h1>Hallitus 2024</h1>
+        <h1>Hallitus 2025</h1>
         <div className="leadmembers">
             <p><b>Puheenjohtaja:</b> Kari Liimatainen 050 0982 867</p>
             <p><b>Varapuheenjohtaja:</b> Jani Rautiainen 050 3632 645</p>

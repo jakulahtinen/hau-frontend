@@ -1,10 +1,10 @@
 import React, { useEffect, useState} from "react";
 import { Picture } from "../interfaces/picture";
 import { fetchPictures } from "../api/picturesApi";
-import { Link } from "react-router-dom";
 import '../styles/photos.css';
 
 const getYear = (dateStr: string) => new Date(dateStr).getFullYear();
+const getMonth = (dateStr: string) => new Date(dateStr).getMonth() + 1;
 
 const Photospage = () => {
     const [photosList, setPhotosList] = useState<Picture[]>([]);
@@ -13,8 +13,11 @@ const Photospage = () => {
 
     //UUDET CONSTIT
     const [filteredPhotos, setFilteredPhotos] = useState<Picture[]>([]);
-    const [selectedYear, setSelectedYear] = useState<number>(2025);
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
+    const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null); // Lightboxin indeksi>
+    const [showMonths, setShowMonths] = useState<boolean>(false);
+
 
     useEffect(() => {
         const loadPhotos = async () => {
@@ -32,51 +35,118 @@ const Photospage = () => {
     }, []);
 
 
-    //FILTERING LATER
+    // Filter by year/month
     useEffect(() => {
-        const filtered = photosList.filter(p => p.uploadedAt && getYear(p.uploadedAt.toString()) === selectedYear);
+        let filtered = [...photosList];
+
+        if (selectedYear) {
+            filtered = filtered.filter(p => p.uploadedAt && getYear(p.uploadedAt.toString()) === selectedYear);
+        }
+
+        if (selectedMonth) {
+            filtered = filtered.filter(p => p.uploadedAt && getMonth(p.uploadedAt.toString()) === selectedMonth);
+        }
+
         setFilteredPhotos(filtered);
-    }, [photosList, selectedYear]);
+    }, [photosList, selectedYear, selectedMonth]);
+    
 
-    //LightBox>
+    // Compute available years dynamically
+    const availableYears = Array.from(new Set(photosList.map(p => getYear(p.uploadedAt?.toString() ?? "")))).sort((a, b) => b - a);
+
+    // Compute available months for selected year
+    const availableMonths = selectedYear
+        ? Array.from(new Set(photosList
+            .filter(p => getYear(p.uploadedAt?.toString() ?? "") === selectedYear)
+            .map(p => getMonth(p.uploadedAt?.toString() ?? ""))))
+        : [];
+
+    // Show latest 12 if no year selected
+    const displayPhotos = selectedYear ? filteredPhotos : photosList.slice(-12).reverse();
+
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (lightboxIndex === null) return;
+        if (lightboxIndex === null) return;
 
+        const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight") {
-                setLightboxIndex((prev) => (prev! + 1) % filteredPhotos.length);
-            } else if (e.key === "ArrowLeft") {
-                setLightboxIndex((prev) => (prev! - 1 + filteredPhotos.length) % filteredPhotos.length);
-            } else if (e.key === "Escape") {
+                setLightboxIndex((prev) => (prev! + 1) % displayPhotos.length);
+            } 
+            else if (e.key === "ArrowLeft") {
+                setLightboxIndex((prev) => (prev! - 1 + displayPhotos.length) % displayPhotos.length);
+            }
+            else if (e.key === "Escape") {
                 setLightboxIndex(null);
             }
         };
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [lightboxIndex, filteredPhotos.length]);
+    }, [lightboxIndex, displayPhotos.length]);
+
 
 
     if (loading) return <p>Ladataan kuvia...</p>;
     if (error) return <p>Virhe: {error}</p>;
 
-
+    
     return (
         <div>
+            {/* Select year */}
             <div className="year-filter">
-                {[2025].map((year) => (
-                    <button
-                        key={year}
-                        className={year === selectedYear ? "active" : ""}
-                        onClick={() => setSelectedYear(year)}
-                    >
-                        {year}
-                    </button>
-                ))}
+                {availableYears.map(year => {
+                    const isActive = year === selectedYear && showMonths; // vain jos kuukaudet näkyvät
+
+                    return (
+                        <button
+                            key={year}
+                            className={isActive ? "active" : ""}
+                            onClick={() => {
+                                if (year === selectedYear) {
+                                    // Toggle kuukaiden näkyvyys
+                                    setShowMonths(prev => !prev);
+                                    setSelectedMonth(null); 
+                                } else {
+                                    // Valittiin uusi vuosi
+                                    setSelectedYear(year);
+                                    setSelectedMonth(null);
+                                    setShowMonths(true);
+                                }
+                            }}
+                        >
+                            {year}
+                        </button>
+                    );
+                })}
             </div>
+
+            {/* Select month */}
+            {selectedYear && showMonths && (
+                <div className="month-filter">
+                    {availableMonths.map(month => {
+                        const isActive = month === selectedMonth;
+
+                        return (
+                            <button
+                                key={month}
+                                className={isActive ? "active" : ""}
+                                onClick={() => {
+                                    if (month === selectedMonth) {
+                                        // Toggle pois
+                                        setSelectedMonth(null);
+                                    } else {
+                                        setSelectedMonth(month);
+                                    }
+                                }}
+                            >
+                                {month} / {selectedYear}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
         
             <div className="photos-container">
-                {filteredPhotos.map((photo, index) => (
+                {displayPhotos.map((photo, index) => (
                     <div className="photo-item" key={photo.id} onClick={() => setLightboxIndex(index)}>
                         <img
                             src={photo.imageData ? `data:image/jpeg;base64,${photo.imageData}` : 'default-image.jpg'}
@@ -91,14 +161,19 @@ const Photospage = () => {
                 <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
                     <div className="lightbox-content" onClick={e => e.stopPropagation()}>
                         <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>✖</button>
-                        <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + filteredPhotos.length) % filteredPhotos.length)}>←</button>
+
+                        <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + displayPhotos.length) % displayPhotos.length)}>←</button>
                         <img
-                            src={`data:image/jpeg;base64,${filteredPhotos[lightboxIndex].imageData}`}
-                            alt={filteredPhotos[lightboxIndex].title}
+                            src={`data:image/jpeg;base64,${displayPhotos[lightboxIndex].imageData}`}
+                            alt={displayPhotos[lightboxIndex].title}
                             className="lightbox-image"
                         />
-                        <button className="lightbox-next" onClick={() => setLightboxIndex((lightboxIndex + 1) % filteredPhotos.length)}>→</button>
-                        <p className="lightbox-caption">{filteredPhotos[lightboxIndex].title}</p>
+                        <button className="lightbox-next" onClick={() => setLightboxIndex((lightboxIndex + 1) % displayPhotos.length)}>→</button>
+                        <p className="lightbox-counter">
+                            {lightboxIndex + 1} / {displayPhotos.length}
+                        </p>
+
+                        <p className="lightbox-caption">{displayPhotos[lightboxIndex].title}</p>
                     </div>
                 </div>
             )}

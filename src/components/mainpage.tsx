@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/main.css";
-import mainpagepicture from '../assets/mainpageheader.jpg';
+import HauPhotoSub from '../assets/HauPhotoSub.png';
+import HauWinter from '../assets/Hau_winter.jpg';
 import { News } from "../interfaces/news";
 import { fetchNews } from "../api/newsApi";
 
@@ -11,7 +12,12 @@ const Mainpage = () => {
     const [error, setError] = useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [fade, setFade] = useState(true);
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
+    const trimText = (text: string, maxLength: number) => {
+        if (!text) return "";
+        return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    };
 
     // Fade the news to next one in every 30 seconds.
     useEffect(() => {
@@ -27,6 +33,27 @@ const Mainpage = () => {
       
         return () => clearInterval(interval);
     }, [newsList]);
+
+
+    // Touch swipe events
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStartX(e.touches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (touchStartX === null) return;
+        const touchEndX = e.touches[0].clientX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+            setCurrentIndex((prev) => (prev + 1) % newsList.length);
+        } else {
+            setCurrentIndex((prev) => (prev - 1 + newsList.length) % newsList.length);
+        }
+        setTouchStartX(null);
+        }
+    };
 
     // Fetch news from API
     useEffect(() => {
@@ -62,7 +89,7 @@ const Mainpage = () => {
                 <p> Järjestämme kilpailuja ja muita autoiluun liittyviä tapahtumia, jotka tarjoavat elämyksiä kaikille lajin ystäville.</p>
             </div>
             <div className="mainpagepicture">
-                <img src={mainpagepicture} alt="Main Picture" className="mainpagepicture" />
+                <img src={HauPhotoSub} alt="Main Picture" className="mainpagepicture" />
                 <p style={{ marginTop: "0px", textAlign: "center" }}>Hirvensalmen autourheilijat on perustettu vuonna 1997. </p>
             </div>
 
@@ -72,9 +99,33 @@ const Mainpage = () => {
             ) : error ? (
             <p style={{ color: "red" }}>{error}</p>
             ) : newsList.length > 0 ? (
-            <div className="latest-news-carousel">
-                <Link to={`/news/${newsList[currentIndex].id}`} className="news-item-link">
-                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : ""}`}>
+            <div 
+            className="latest-news-carousel"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            >
+                <div
+                    className="carousel-arrow left"
+                    onClick={() =>
+                        setCurrentIndex((prev) =>
+                            prev === 0 ? newsList.length - 1 : prev - 1
+                        )
+                    }
+                >
+                    ‹
+                </div>
+                <div
+                    className="carousel-arrow right"
+                    onClick={() =>
+                        setCurrentIndex((prev) =>
+                            (prev + 1) % newsList.length
+                        )
+                    }
+                >
+                    ›
+                </div>
+                <Link to={`/news/${newsList[currentIndex].id}`} state={{ from: "mainpage" }} className="news-item-link">
+                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : "has-image"}`}>
                     <div className="news-title">
                         <h3>{newsList[currentIndex].title}</h3>
                         <p className="news-date">{formatDate(newsList[currentIndex].publishedAt ?? "")}</p>
@@ -89,7 +140,12 @@ const Mainpage = () => {
                     </div>
                     )}
                     <div className="news-content">
-                        <p>{newsList[currentIndex].content}</p>
+                        <p>
+                            {newsList[currentIndex].imageData
+                                ? trimText(newsList[currentIndex].content, 150)   // kuva → trim
+                                : newsList[currentIndex].content                  // ei kuvaa → koko
+                            }
+                        </p>
                     </div>
                 </div>
                 </Link>
@@ -135,6 +191,7 @@ const Mainpage = () => {
             </ul>
         </div>
         <h1>Talvella tapahtuu!</h1>
+        <img src={HauWinter} alt="winter" className="winter-image"/>
         <h3>Jäärata talvikaudella</h3>
         <div className="winter">
             <ul className="winterlist">

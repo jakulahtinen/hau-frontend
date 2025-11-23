@@ -1,34 +1,97 @@
-/* Headerin perusasetukset */
+@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
+
 .header {
-    width: 100%; /* Kattaa koko sivun leveyden */
-    height: auto; /* Skaalautuu kuvan korkeuden mukaan */
-    display: flex; /* Asetellaan sisältö joustavasti */
-    justify-content: center; /* Sisältö keskelle vaakasuunnassa */
-    align-items: center; /* Sisältö keskelle pystysuunnassa */
-    position: relative; /* Mahdollistaa lisätyylit (esim. overlay) */
-    overflow: hidden; /* Piilottaa ylimääräisen sisällön */
-    padding: 0; /* Poistaa oletusmarginaalit */
-    margin: 0; /* Poistaa oletusreunukset */
+    width: 100%; 
+    position: relative;
+    overflow: hidden;
+
 }
 
-/* Header-kuva */
 .headerPicture {
-    width: 100%; /* Kuva täyttää headerin leveyden */
-    height: 100%; /* Kuva täyttää headerin korkeuden */
-    object-fit: cover; /* Kuva täyttää headerin alueen ilman vääristymiä */
-    display: block; /* Poistaa ylimääräiset marginaalit */
-    object-position: center top; /* Kuva keskittyy headerin keskelle */
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+    display: block; 
+    object-position: center top; 
 }
 
-/* Responsiivisuus: Suurilla näytöillä */
+
+.headerTextContainer {
+    position: absolute;
+    top: 30%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white; 
+
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9); 
+    z-index: 10; 
+    width: 90%; 
+    max-width: 1200px; 
+
+    font-family: 'Racing Sans One', sans-serif;
+}
+
+
+.clubNameAnimated {
+
+    font-weight: 900;
+    font-size: 5rem; 
+    letter-spacing: 2px;  
+    margin: 0;
+    
+
+    animation: fadeInSlideDown 2s ease-in-out forwards;
+}
+
+
+.sinceText {
+
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-weight: normal;
+    font-size: 2.5rem; 
+    margin-top: 5px;
+    letter-spacing: 5px; 
+    
+    /* Delayed animation */
+    animation: fadeIn 1.5s ease-out 1s forwards; 
+    opacity: 0; 
+}
+
+
+/* --- DEFINE THE ANIMATIONS (KEYFRAMES) --- */
+
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+/* Media Queries */
 @media (min-width: 1200px) {
     .header {
-        height: 75vh; /* Suurempi korkeus suurilla näytöillä */    }
+        height: 75vh; 
+    }
 }
 
-/* Responsiivisuus: Pienillä näytöillä */
 @media (max-width: 768px) {
     .header {
-        height: 50vh; /* Pienempi korkeus mobiilissa */
+        height: 50vh;
     }
 }
