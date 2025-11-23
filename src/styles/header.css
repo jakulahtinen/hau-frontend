@@ -9,46 +9,44 @@
 
 .headerPicture {
     width: 100%; 
-    height: 80%;
+    height: 100%;
     object-fit: cover;
     display: block; 
     object-position: center top; 
 }
 
 
-
-/* Position the text container over the image */
 .headerTextContainer {
     position: absolute;
-    top: 30%; /* MOVED UP: Was 50%, now 30% from the top */
+    top: 30%; 
     left: 50%; 
-    transform: translate(-50%, -50%); /* Adjust for centering based on its own size */
+    transform: translate(-50%, -50%);
     text-align: center;
     color: white; 
-    /* Increased Shadow for better visibility */
+
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9); 
     z-index: 10; 
     width: 90%; 
-    max-width: 1200px; /* Optional: Limit maximum width on very large screens */
+    max-width: 1200px; 
 
     font-family: 'Racing Sans One', sans-serif;
 }
 
-/* Club Name Styling and Animation (ADJUSTED) */
+
 .clubNameAnimated {
-    /* FONT CHANGE: Using a bold, blocky font. Replace this with your desired web font if available. */
+
     font-weight: 900;
     font-size: 5rem; 
     letter-spacing: 2px;  
     margin: 0;
     
-    /* Animation remains the same: Fade in and Slide down */
+
     animation: fadeInSlideDown 2s ease-in-out forwards;
 }
 
-/* 'Since 1997' Styling (ADJUSTED) */
+
 .sinceText {
-    /* FONT CHANGE: Inherits font from above for consistency */
+
     font-family: 'Arial Black', Impact, sans-serif;
     font-weight: normal;
     font-size: 2.5rem; 
@@ -63,19 +61,17 @@
 
 /* --- DEFINE THE ANIMATIONS (KEYFRAMES) --- */
 
-/* Animation for the main club name: Fade in while sliding slightly down */
 @keyframes fadeInSlideDown {
     0% {
-        opacity: 0; /* Start invisible */
-        transform: translateY(-20px); /* Start slightly above final position */
+        opacity: 0;
+        transform: translateY(-20px);
     }
     100% {
-        opacity: 1; /* End fully visible */
-        transform: translateY(0); /* End in final position */
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* Animation for 'Since 1997': Simple fade-in */
 @keyframes fadeIn {
     0% {
         opacity: 0;

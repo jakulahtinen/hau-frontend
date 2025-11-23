@@ -18,6 +18,7 @@
 
 .mainpagepicture {
     border-radius: 25px;
+    width: 100%;
 }
 
 
@@ -53,9 +54,6 @@
     list-style-position: inside;
 }
 
-.winterlist li {
-    display: flex;
-}
 
 
 
@@ -151,13 +149,7 @@ a.news-item-link {
 .news-content {
     flex-grow: 1;
     max-height: z20px;
-
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 6;
-    -webkit-box-orient: vertical;
-    line-clamp: 3;
-
     text-align: center;
     max-width: 650px;
 }
@@ -173,13 +165,13 @@ a.news-item-link {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;        /* kiinteä leveys */
-    height: 40px;       /* kiinteä korkeus */
+    width: 40px;       
+    height: 40px;      
     font-size: 2rem;
     color: #333;
     cursor: pointer;
 
-    display: flex;      /* keskitetään nuoli sisällä */
+    display: flex;      
     align-items: center;
     justify-content: center;
 
@@ -266,6 +258,11 @@ a.news-item-link {
 .news-image-frontpage.no-image {
     justify-content: center;
     align-items: center;
+}
+
+.winter-image {
+    width: 80%;
+    border-radius: 8px;
 }
 
 

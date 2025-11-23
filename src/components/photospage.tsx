@@ -18,24 +18,6 @@ const Photospage = () => {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null); // Lightboxin indeksi>
     const [showMonths, setShowMonths] = useState<boolean>(false);
 
-    const toggleYear = (year: number) => {
-        // Jos klikataan jo valittua vuotta → nollataan ja piilotetaan kuukaudet
-        if (selectedYear === year) {
-            setSelectedYear(null);
-            setSelectedMonth(null);
-        } else {
-            setSelectedYear(year);
-            setSelectedMonth(null); // nollataan kuukausivalinta
-        }
-    };
-
-    const toggleMonth = (month: number) => {
-        if (selectedMonth === month) {
-            setSelectedMonth(null); // uncheck
-        } else {
-            setSelectedMonth(month);
-        }
-    };
 
     useEffect(() => {
         const loadPhotos = async () => {
@@ -67,6 +49,7 @@ const Photospage = () => {
 
         setFilteredPhotos(filtered);
     }, [photosList, selectedYear, selectedMonth]);
+    
 
     // Compute available years dynamically
     const availableYears = Array.from(new Set(photosList.map(p => getYear(p.uploadedAt?.toString() ?? "")))).sort((a, b) => b - a);
@@ -78,33 +61,34 @@ const Photospage = () => {
             .map(p => getMonth(p.uploadedAt?.toString() ?? ""))))
         : [];
 
+    // Show latest 12 if no year selected
+    const displayPhotos = selectedYear ? filteredPhotos : photosList.slice(-12).reverse();
+
+    useEffect(() => {
+        if (lightboxIndex === null) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                setLightboxIndex((prev) => (prev! + 1) % displayPhotos.length);
+            } 
+            else if (e.key === "ArrowLeft") {
+                setLightboxIndex((prev) => (prev! - 1 + displayPhotos.length) % displayPhotos.length);
+            }
+            else if (e.key === "Escape") {
+                setLightboxIndex(null);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [lightboxIndex, displayPhotos.length]);
+
+
+
     if (loading) return <p>Ladataan kuvia...</p>;
     if (error) return <p>Virhe: {error}</p>;
 
-    // Show latest 8 if no year selected
-    const displayPhotos = selectedYear ? filteredPhotos : photosList.slice(-8).reverse();
-
-
-
-    // //LightBox>
-    // useEffect(() => {
-    //     const handleKeyDown = (e: KeyboardEvent) => {
-    //         if (lightboxIndex === null) return;
-
-    //         if (e.key === "ArrowRight") {
-    //             setLightboxIndex((prev) => (prev! + 1) % filteredPhotos.length);
-    //         } else if (e.key === "ArrowLeft") {
-    //             setLightboxIndex((prev) => (prev! - 1 + filteredPhotos.length) % filteredPhotos.length);
-    //         } else if (e.key === "Escape") {
-    //             setLightboxIndex(null);
-    //         }
-    //     };
-
-    //     window.addEventListener("keydown", handleKeyDown);
-    //     return () => window.removeEventListener("keydown", handleKeyDown);
-    // }, [lightboxIndex, filteredPhotos.length]);
-
-
+    
     return (
         <div>
             {/* Select year */}
@@ -120,7 +104,7 @@ const Photospage = () => {
                                 if (year === selectedYear) {
                                     // Toggle kuukaiden näkyvyys
                                     setShowMonths(prev => !prev);
-                                    setSelectedMonth(null); // nollaa kuukausi toggle-tilanteessa
+                                    setSelectedMonth(null); 
                                 } else {
                                     // Valittiin uusi vuosi
                                     setSelectedYear(year);
@@ -177,6 +161,7 @@ const Photospage = () => {
                 <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
                     <div className="lightbox-content" onClick={e => e.stopPropagation()}>
                         <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>✖</button>
+
                         <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + displayPhotos.length) % displayPhotos.length)}>←</button>
                         <img
                             src={`data:image/jpeg;base64,${displayPhotos[lightboxIndex].imageData}`}
@@ -184,6 +169,10 @@ const Photospage = () => {
                             className="lightbox-image"
                         />
                         <button className="lightbox-next" onClick={() => setLightboxIndex((lightboxIndex + 1) % displayPhotos.length)}>→</button>
+                        <p className="lightbox-counter">
+                            {lightboxIndex + 1} / {displayPhotos.length}
+                        </p>
+
                         <p className="lightbox-caption">{displayPhotos[lightboxIndex].title}</p>
                     </div>
                 </div>
