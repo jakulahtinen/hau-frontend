@@ -1,10 +1,10 @@
 import { News } from "../interfaces/news";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 // GET News
 export const fetchNews = async (): Promise<News[]> => {
-  const response = await fetch(`${API_URL}/News`);
+  const response = await fetch(`${API_BASE_URL}/News`);
   if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
   
   const data: News[] = await response.json();
@@ -45,7 +45,7 @@ export const createNews = async (news: { title: string; content: string; imageFi
       imageData = await imagePromise;
   }
 
-  const response = await fetch(`${API_URL}/News`, {
+  const response = await fetch(`${API_BASE_URL}/News`, {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const updateNews = async (id: number, title: string, content: string): Pr
     return;
   }
 
-  const response = await fetch(`${API_URL}/News/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/News/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const deleteNews = async (id: number): Promise<void> => {
     return;
   }
 
-  const response = await fetch(`${API_URL}/News/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/News/${id}`, {
       method: "DELETE",
       headers: {
       "Authorization": `Bearer ${token}`,
