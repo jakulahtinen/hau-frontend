@@ -1,4 +1,3 @@
-import React from "react";
 import "../styles/join.css";
 import joinpicture from '../assets/joinpagepic.jpg';
 

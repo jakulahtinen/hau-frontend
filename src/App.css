@@ -20,10 +20,10 @@ html, body {
 }
 
 .MuiContainer-root {
-  min-height: calc(100vh - 120px); /* Lasketaan headerin ja footerin korkeus pois */
+  min-height: calc(100vh - 120px); 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Keskitetään sisältö */
+  justify-content: center; 
 }
 
 .MuiContainer-root {

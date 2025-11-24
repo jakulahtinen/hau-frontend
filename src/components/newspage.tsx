@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/news.css";
 import { News } from "../interfaces/news";
 import { fetchNews } from "../api/newsApi";
@@ -48,9 +48,9 @@ const NewsPage = () => {
             {newsList.map((news: any) => (
                 <div className="news-item" key={news.id}>
                     <div className="news-image">
-                        {news.imageData ? (
+                        {news.imageUrl ? (
                             <img
-                            src={news.imageData ? `data:image/jpeg;base64,${news.imageData}` : 'default-image.jpg'}
+                            src={news.imageUrl ? `${news.imageUrl}` : 'default-image.jpg'}
                             alt={news.title}
                             />
                         ) : (

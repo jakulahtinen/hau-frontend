@@ -22,7 +22,7 @@ export const fetchNews = async (): Promise<News[]> => {
 };
 
 // CREATE News
-export const createNews = async (news: { title: string; content: string; imageData?: File }): Promise<void> => {
+export const createNews = async (news: { title: string; content: string; imageFile?: File }): Promise<void> => {
   const token = localStorage.getItem("token");
   if (!token) {
       alert("Et ole kirjautunut sisään!");
@@ -31,7 +31,7 @@ export const createNews = async (news: { title: string; content: string; imageDa
 
   let imageData = "";
 
-  if (news.imageData instanceof File) {
+  if (news.imageFile instanceof File) {
       const reader = new FileReader();
 
       const imagePromise = new Promise<string>((resolve) => {
@@ -39,7 +39,7 @@ export const createNews = async (news: { title: string; content: string; imageDa
               const base64Data = reader.result?.toString().split(",")[1] || "";
               resolve(base64Data);
           };
-          reader.readAsDataURL(news.imageData as File);
+          reader.readAsDataURL(news.imageFile as File);
       });
 
       imageData = await imagePromise;

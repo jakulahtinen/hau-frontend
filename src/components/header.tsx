@@ -1,10 +1,8 @@
-import HAUHeader from '../assets/HAUHeader.jpg';
 import HauCoverWinter from '../assets/HauCoverWinter.png';
 import "../styles/header.css";
 
 const Header = () => (
     <header className='header'>
-        {/* <img src={HAUHeader} alt="Header Picture" className='headerPicture' /> */}
         <img src={HauCoverWinter} alt="Header Picture" className='headerPicture' />
 
         {/* Header text */}
