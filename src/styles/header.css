@@ -23,24 +23,18 @@
     transform: translate(-50%, -50%);
     text-align: center;
     color: white; 
-
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9); 
     z-index: 10; 
     width: 90%; 
     max-width: 1200px; 
-
     font-family: 'Racing Sans One', sans-serif;
 }
 
 
 .clubNameAnimated {
-
-    font-weight: 900;
-    font-size: 5rem; 
-    letter-spacing: 2px;  
+    font-weight: 1000;
+    font-size: 6rem; 
     margin: 0;
-    
-
     animation: fadeInSlideDown 2s ease-in-out forwards;
 }
 
