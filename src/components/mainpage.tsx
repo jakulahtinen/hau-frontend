@@ -125,15 +125,15 @@ const Mainpage = () => {
                     ›
                 </div>
                 <Link to={`/news/${newsList[currentIndex].id}`} state={{ from: "mainpage" }} className="news-item-link">
-                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageData ? "no-image" : "has-image"}`}>
+                <div className={`news-item-frontpage ${fade ? "fade-in" : "fade-out"} ${!newsList[currentIndex].imageUrl ? "no-image" : "has-image"}`}>
                     <div className="news-title">
                         <h3>{newsList[currentIndex].title}</h3>
                         <p className="news-date">{formatDate(newsList[currentIndex].publishedAt ?? "")}</p>
                     </div>
-                    {newsList[currentIndex].imageData && (
+                    {newsList[currentIndex].imageUrl && (
                     <div className="news-image-frontpage">
                         <img
-                        src={`data:image/jpeg;base64,${newsList[currentIndex].imageData}`}
+                        src={`${newsList[currentIndex].imageUrl}`}
                         alt={newsList[currentIndex].title}
                         className="main-news-image"
                         />
@@ -141,9 +141,9 @@ const Mainpage = () => {
                     )}
                     <div className="news-content">
                         <p>
-                            {newsList[currentIndex].imageData
-                                ? trimText(newsList[currentIndex].content, 150)   // kuva → trim
-                                : newsList[currentIndex].content                  // ei kuvaa → koko
+                            {newsList[currentIndex].imageUrl
+                                ? trimText(newsList[currentIndex].content, 150)   // image → trim
+                                : newsList[currentIndex].content                  // no image → full
                             }
                         </p>
                     </div>

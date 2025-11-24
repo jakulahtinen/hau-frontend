@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import { Picture } from "../interfaces/picture";
 import { fetchPictures } from "../api/picturesApi";
 import '../styles/photos.css';
@@ -94,7 +94,7 @@ const Photospage = () => {
             {/* Select year */}
             <div className="year-filter">
                 {availableYears.map(year => {
-                    const isActive = year === selectedYear && showMonths; // vain jos kuukaudet näkyvät
+                    const isActive = year === selectedYear && showMonths;
 
                     return (
                         <button
@@ -102,11 +102,9 @@ const Photospage = () => {
                             className={isActive ? "active" : ""}
                             onClick={() => {
                                 if (year === selectedYear) {
-                                    // Toggle kuukaiden näkyvyys
                                     setShowMonths(prev => !prev);
                                     setSelectedMonth(null); 
                                 } else {
-                                    // Valittiin uusi vuosi
                                     setSelectedYear(year);
                                     setSelectedMonth(null);
                                     setShowMonths(true);
@@ -131,7 +129,7 @@ const Photospage = () => {
                                 className={isActive ? "active" : ""}
                                 onClick={() => {
                                     if (month === selectedMonth) {
-                                        // Toggle pois
+                                        // Toggle off
                                         setSelectedMonth(null);
                                     } else {
                                         setSelectedMonth(month);
@@ -149,7 +147,7 @@ const Photospage = () => {
                 {displayPhotos.map((photo, index) => (
                     <div className="photo-item" key={photo.id} onClick={() => setLightboxIndex(index)}>
                         <img
-                            src={photo.imageData ? `data:image/jpeg;base64,${photo.imageData}` : 'default-image.jpg'}
+                            src={photo.imageUrl ? photo.imageUrl : 'default-image.jpg'}
                             alt={photo.title}
                             className="photo-image"
                         />
@@ -164,7 +162,7 @@ const Photospage = () => {
 
                         <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + displayPhotos.length) % displayPhotos.length)}>←</button>
                         <img
-                            src={`data:image/jpeg;base64,${displayPhotos[lightboxIndex].imageData}`}
+                            src={displayPhotos[lightboxIndex].imageUrl}
                             alt={displayPhotos[lightboxIndex].title}
                             className="lightbox-image"
                         />

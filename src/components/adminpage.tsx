@@ -66,7 +66,7 @@ const AdminPanel = () => {
         }
     
         try {
-            await createNews({ title, content, imageData: imageFile ?? undefined });
+            await createNews({ title, content, imageFile: imageFile ?? undefined });
             setSuccesMessage("Uutinen lisätty onnistuneesti!");
             setTimeout(() => {
                 setSuccesMessage(null);
@@ -174,9 +174,9 @@ const AdminPanel = () => {
                         {newsList.map((news) => (
                             <li key={news.id}>
                                 <h3>{news.title}</h3>
-                                {news.imageData && (
+                                {news.imageUrl && (
                                     <img
-                                        src={`data:image/png;base64,${news.imageData}`}
+                                        src={news.imageUrl}
                                         alt="News Image"
                                         className="news-image-admin"
                                     />

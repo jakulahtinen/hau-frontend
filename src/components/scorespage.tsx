@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Scores } from "../interfaces/scores";
 import { fetchScores } from "../api/scoresApi";
 import "../styles/scorespage.css";

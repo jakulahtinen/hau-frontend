@@ -64,9 +64,9 @@ const NewsDetail = () => {
                     </div>
                     <h1>{news.title}</h1>
                     <p className="news-date">{formatDate(news.publishedAt)}</p>
-                    {news.imageData && (
+                    {news.imageUrl && (
                         <img
-                            src={`data:image/jpeg;base64,${news.imageData}`}
+                            src={news.imageUrl}
                             alt={news.title}
                             className="news-detail-image"
                         />

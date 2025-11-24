@@ -38,7 +38,7 @@ export const addPicture = async (title: string, imageFile: File): Promise<void> 
         imageData = await imagePromise;
     }
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/Pictures`, {
+    const response = await fetch(`${API_URL}/Pictures`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

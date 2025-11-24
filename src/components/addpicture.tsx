@@ -151,9 +151,9 @@ const AddPicture = () => {
                     <ul>
                         {pictures.map((picture) => (
                             <li key={picture.id}>
-                                {picture.imageData && (
+                                {picture.imageUrl && (
                                     <img
-                                        src={`data:image/png;base64,${picture.imageData}`}
+                                        src={picture.imageUrl}
                                         alt="News Image"
                                         className="add-images-admin"
                                     />

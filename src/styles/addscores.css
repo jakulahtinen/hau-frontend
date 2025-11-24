@@ -80,13 +80,6 @@
     white-space: pre-line;
 }
 
-/* .scores-list,
-.scores-list ul,
-.scores-list li {
-    border-right: none !important;
-    box-shadow: none !important;
-} */
-
 .scores-title {
     border-bottom: #ccc 2px solid;
     width: 100%;
