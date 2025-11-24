@@ -155,3 +155,13 @@
   font-size: 1.1rem;
   opacity: 0.9;
 }
+
+@media (max-width: 768px) {
+  .lightbox-prev {
+    display: none;
+  }
+
+  .lightbox-next {
+    display: none;
+  }
+}

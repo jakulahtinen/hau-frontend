@@ -290,6 +290,12 @@ a.news-item-link {
         text-align: center;
     }
 
+    
+    .winter-image {
+        width: 100%;
+        border-radius: 8px;
+    }
+
 }
 
 @media screen and (orientation: landscape) and (max-height: 500px) {
