@@ -30,6 +30,7 @@ jobs:
           
           # --- REACT CONFIGURATION ---
           app_location: "/" 
+          app_build_command: "npm run build"
           output_location: "build" 
           # --- END CONFIGURATION ---
           
