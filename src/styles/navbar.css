@@ -139,7 +139,6 @@ color: #007bff;
     opacity: 0.7;
 }
 
-/* MOBILE VIEW */
 @media (max-width: 768px) {
     .navbar.desktop {
         display: none;
