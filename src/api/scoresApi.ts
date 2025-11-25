@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 // GET Scores
 export const fetchScores = async (): Promise<Scores[]> => {
-    const response = await fetch (`${API_BASE_URL}/Scores`);
+    const response = await fetch (`${API_BASE_URL}/api/Scores`);
     if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
 
     const data: Scores[] = await response.json();
@@ -29,7 +29,7 @@ export const addScores = async (scores: { title: string, content: string }): Pro
         return;
     }
 
-    const response = await fetch (`${API_BASE_URL}/Scores`, {
+    const response = await fetch (`${API_BASE_URL}/api/Scores`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const updateScores = async (id: number, title: string, content: string): 
         return;
     }
 
-    const response = await fetch (`${API_BASE_URL}/Scores/${id}`, {
+    const response = await fetch (`${API_BASE_URL}/api/Scores/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export const deleteScores = async (id: number): Promise<void> => {
         return;
     }
 
-    const response = await fetch (`${API_BASE_URL}/Scores/${id}`, {
+    const response = await fetch (`${API_BASE_URL}/api/Scores/${id}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${token}`

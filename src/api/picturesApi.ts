@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 //GET PICTURE
 export const fetchPictures = async (): Promise<Picture[]> => {
-    const response = await fetch(`${API_BASE_URL}/Pictures`);
+    const response = await fetch(`${API_BASE_URL}/api/Pictures`);
     if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
     }
@@ -38,7 +38,7 @@ export const addPicture = async (title: string, imageFile: File): Promise<void> 
         imageData = await imagePromise;
     }
 
-    const response = await fetch(`${API_BASE_URL}/Pictures`, {
+    const response = await fetch(`${API_BASE_URL}/api/Pictures`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const deletePicture = async (id: number): Promise<void> => {
       return;
     }
 
-    const response = await fetch(`${API_BASE_URL}/Pictures/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/Pictures/${id}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -89,7 +89,7 @@ export const updateCaption = async (id: number, title: string): Promise<void> =>
         return;
     }
 
-    const response = await fetch(`${API_BASE_URL}/Pictures/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/Pictures/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
