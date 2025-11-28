@@ -71,16 +71,26 @@ const Navbar = () => {
         <nav className="navbar-container">
             <div className="navbar-top">
                 {isMobile && (
-                    <div 
-                        className={`menu-icon ${menuOpen ? 'menu-open-active' : ''}`}
-                        onClick={handleMenuToggle}
-                    >
-                        {menuOpen ? (
-                            <CloseIcon style={{ fontSize: "36px" }} /> 
-                        ) : (
-                            <MenuIcon style={{ fontSize: "36px" }} /> 
-                        )}
-                    </div>
+                    <>
+                        <Link 
+                            to="/" 
+                            className="mobile-home-link"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Etusivu
+                        </Link>
+
+                        <div 
+                            className={`menu-icon ${menuOpen ? 'menu-open-active' : ''}`}
+                            onClick={handleMenuToggle}
+                        >
+                            {menuOpen ? (
+                                <CloseIcon style={{ fontSize: "36px" }} /> 
+                            ) : (
+                                <MenuIcon style={{ fontSize: "36px" }} /> 
+                            )}
+                        </div>
+                    </>
                 )}
             </div>
     

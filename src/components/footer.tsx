@@ -1,5 +1,6 @@
 import "../styles/footer.css";
 import FacebookIcon from '@mui/icons-material/Facebook';
+import hauheaderlogo from '../assets/hauheaderlogo.png';
 
 const Footer = () => (
     <footer className="footer">
@@ -26,8 +27,16 @@ const Footer = () => (
                     <span className="footer-icon-container"><FacebookIcon className="footer-icon" /></span>
                 </a> 
             </div>
+
+            <div>
+                <img src={hauheaderlogo} alt="logo" />
+            </div>
             
         </div>
+
+
+
+
         
         {/* Copyright is centered at the bottom */}
         <p className="copyright">&copy; 2025 Jaku. All Rights Reserved.</p>

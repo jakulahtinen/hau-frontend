@@ -257,39 +257,30 @@ a.news-item-link {
 }
 
 
-/* 1. Viewport: Defines the visible area and hides off-screen slides */
 .latest-news-carousel-viewport {
-    /* The main difference between your old .latest-news-carousel and the new one: */
-    max-width: 900px; /* Use a fixed max-width for better desktop centering */
-    width: 90%; /* Responsive width */
+    max-width: 900px; 
+    width: 90%; 
     margin: 0 auto;
     position: relative;
-    overflow: hidden; /* <-- KEY: Hides content that slides out */
+    overflow: hidden; 
     padding-bottom: 0;
 }
 
-/* 2. Sliding Track: Essential for horizontal movement */
 .news-slider-track {
-    display: flex; /* <-- KEY: Lays all news items side-by-side */
+    display: flex; 
     height: 100%;
-    touch-action: pan-y; /* Allow vertical scrolling while swiping horizontally */
+    touch-action: pan-y;
     will-change: transform;
-    /* The transition property is correctly applied via inline style in JSX */
 }
 
-/* 3. Individual Slides: Ensure each slide occupies 100% of the viewport */
 .news-slide-item {
-    flex: 0 0 100%; /* Each slide matches the viewport width */
+    flex: 0 0 100%; 
     width: 100%;
     max-width: 100%;
     min-width: 100%;
     box-sizing: border-box;
-    padding: 0 14px; /* add horizontal gutter so adjacent slides don't touch */
+    padding: 0 14px; 
 }
-
-
-
-
 
 /* Media queries */
 @media (max-width: 768px) {

@@ -40,18 +40,6 @@
     border-radius: 5px;
 }
 
-.add-news button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.add-news button:hover {
-    background-color: #0056b3;
-}
 
 .news-list ul {
     list-style: none;
@@ -83,13 +71,98 @@
     flex-direction: column;
 }
 
-.delete-button, .publish-button, .edit-button, .deleteNews-button  {
-    width: 25%;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+.admin-panel button,
+.add-scores button {
+    padding: 17px 40px;
+    border-radius: 50px;
     cursor: pointer;
-    margin-top: 10px;
+    border: 0;
+    background-color: white; 
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    letter-spacing: 0.5px; 
+    font-size: 15px;
+    transition: all 0.5s ease;
+    font-weight: bold; 
+    color: #333; 
+    margin: 5px; 
+    min-width: 120px; 
+}
+
+.admin-panel button:hover,
+.add-scores button:hover {
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+
+}
+
+.admin-panel button:active,
+.add-scores button:active {
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+    transform: translateY(1px);
+    transition: 100ms;
+}
+
+.publish-button {
+    background-color: #4CAF50; 
+    color: white;
+    box-shadow: rgb(76 175 80 / 30%) 0 0 8px; 
+}
+.publish-button:hover {
+    background-color: #388E3C;
+    box-shadow: rgb(76 175 80) 0px 7px 29px 0px;
+}
+.publish-button:active {
+    background-color: #388E3C; 
+    box-shadow: none;
+}
+
+.create-folder-toggle,
+.new-folder-input button,
+.edit-button,
+.editScores-button {
+    background-color: #2196F3; 
+    color: white;
+    box-shadow: rgb(33 150 243 / 30%) 0 0 8px;
+}
+.create-folder-toggle:hover,
+.new-folder-input button:hover,
+.edit-button:hover,
+.editScores-button:hover {
+    background-color: #1976D2;
+    box-shadow: rgb(33 150 243) 0px 7px 29px 0px;
+}
+.create-folder-toggle:active,
+.new-folder-input button:active,
+.edit-button:active,
+.editScores-button:active {
+    background-color: #1976D2;
+    box-shadow: none;
+}
+
+.delete-picture,
+.delete-button,
+.deleteNews-button,
+.deleteScores-button {
+    background-color: #F44336; 
+    color: white;
+    box-shadow: rgb(244 67 54 / 30%) 0 0 8px;
+}
+.delete-picture:hover,
+.delete-button:hover,
+.deleteNews-button:hover,
+.deleteScores-button:hover {
+    background-color: #D32F2F;
+    box-shadow: rgb(244 67 54) 0px 7px 29px 0px;
+}
+.delete-picture:active,
+.delete-button:active,
+.deleteNews-button:active,
+.deleteScores-button:active {
+    background-color: #D32F2F;
+    box-shadow: none;
 }

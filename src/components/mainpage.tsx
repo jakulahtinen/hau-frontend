@@ -152,26 +152,19 @@ const Mainpage = () => {
             ) : error ? (
                 <p style={{ color: "red" }}>{error}</p>
             ) : newsList.length > 0 ? (
-                <div className="latest-news-carousel-viewport"> {/* <-- Outer Viewport */}
+                <div className="latest-news-carousel-viewport"> 
                     
-                    {/*
-                    IMPORTANT: Apply the touch handlers and the translation style 
-                    to the inner sliding track, which contains ALL news items.
-                    */}
                     <div 
                         className="news-slider-track"
                         onTouchStart={handleTouchStart}
                         onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd} /* <-- Add the handleTouchEnd here! */
+                        onTouchEnd={handleTouchEnd} 
                         style={{
                             transform: `translateX(calc(-${translatePercentage}% - ${offsetX}px))`,
                             transition: shouldAnimate ? 'transform 0.3s ease-out' : 'none'
                         }}
                         onTouchCancel={handleTouchEnd}
                     >
-                        {/* MAP ALL NEWS ITEMS HERE.
-                        Each news item becomes one "slide."
-                        */}
                         {newsList.map((news, index) => (
                             <div key={news.id} className="news-slide-item">
                                 <Link to={`/news/${news.id}`} state={{ from: "mainpage" }} className="news-item-link">
@@ -195,28 +188,24 @@ const Mainpage = () => {
                             </div>
                         ))}
 
-                    </div> {/* End of .news-slider-track */}
+                    </div>
+                        <div
+                            className="carousel-arrow left"
+                            onClick={() =>
+                                goToPrevious()
 
-                    {/* Keep the arrows and indicators OUTSIDE the sliding track 
-                    but inside the main wrapper for positioning.
-                    */}
-                                    <div
-                                className="carousel-arrow left"
-                                onClick={() =>
-                                    goToPrevious()
-
-                                }
-                            >
-                                ‹
-                            </div>
-                                    <div
-                                className="carousel-arrow right"
-                                onClick={() =>
-                                    goToNext()
-                                }
-                            >
-                                ›
-                            </div>
+                            }
+                        >
+                        ‹
+                        </div>
+                                <div
+                            className="carousel-arrow right"
+                            onClick={() =>
+                                goToNext()
+                            }
+                        >
+                        ›
+                        </div>
                     
                     <div className="carousel-indicators">
                         {newsList.map((_, index) => (
@@ -230,7 +219,7 @@ const Mainpage = () => {
 
                 </div>
             ) : (
-                <p>Ei uutisia löytynyt.</p>
+                <p>Ei löytynyt.</p>
             )}
         <div className="read-more-wrapper">
             <Link to="/events" className="read-more">
