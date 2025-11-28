@@ -10,14 +10,39 @@ const Photospage = () => {
     const [photosList, setPhotosList] = useState<Picture[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
-    //UUDET CONSTIT
     const [filteredPhotos, setFilteredPhotos] = useState<Picture[]>([]);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
-    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null); // Lightboxin indeksi>
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null); 
     const [showMonths, setShowMonths] = useState<boolean>(false);
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
+    const [touchMoveX, setTouchMoveX] = useState<number | null>(null);
 
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        setTouchStartX(e.touches[0].clientX);
+        setTouchMoveX(null); 
+    };
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        setTouchMoveX(e.touches[0].clientX);
+    };
+    const handleTouchEnd = () => {
+        if (touchStartX === null || touchMoveX === null) return;
+
+        const deltaX = touchStartX - touchMoveX;
+        const swipeThreshold = 50;
+
+        if (Math.abs(deltaX) > swipeThreshold) {
+            if (deltaX > 0) {
+                setLightboxIndex((prev) => (prev! + 1) % displayPhotos.length);
+            } 
+            else {
+                setLightboxIndex((prev) => (prev! - 1 + displayPhotos.length) % displayPhotos.length);
+            }
+        }
+        
+        setTouchStartX(null);
+        setTouchMoveX(null);
+    };
 
     useEffect(() => {
         const loadPhotos = async () => {
@@ -156,10 +181,13 @@ const Photospage = () => {
                 ))}
             </div>
             {lightboxIndex !== null && (
-                <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
+                <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                >
                     <div className="lightbox-content" onClick={e => e.stopPropagation()}>
                         <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>✖</button>
-
                         <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + displayPhotos.length) % displayPhotos.length)}>←</button>
                         <img
                             src={displayPhotos[lightboxIndex].imageUrl}

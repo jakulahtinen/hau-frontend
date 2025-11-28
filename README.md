@@ -1,46 +1,46 @@
-# Getting Started with Create React App
+# Motorsport Club Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the frontend for the new website of a Hirvensalmen Autourheilijat motorsport club. The site is being rebuilt to replace an outdated WordPress site, providing a modern and user-friendly experience for both visitors and administrators.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **News Section**: 
+  - Display news articles with images for club updates and announcements.
+  - Admin user can add, edit, and delete news articles through the admin panel.
 
-### `npm start`
+- **Admin Panel**:
+  - A dedicated area for managing news content efficiently.
+  - Future plans include the ability to upload and manage videos.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Modern Design**: 
+  - A sleek, responsive interface for both desktop and mobile users.
+  - Built with performance and usability in mind.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- **Frontend**: TypeScript, React
+- **Backend**: C# (.NET) with PostgreSQL (managed in a separate repository)
+- **Styling**: CSS
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Publishing
 
-### `npm run build`
+- **Microsoft Azure**
+  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ ## Front page 
+![image](https://github.com/user-attachments/assets/4e8572bf-5373-47e4-a7c9-e58e59224db2)
+![Haufrontpage1](https://github.com/user-attachments/assets/1e1adc82-6d38-4769-b1df-8efb1e4f16ba)
+![Haufrontpage2](https://github.com/user-attachments/assets/5f842260-a7cb-4ef0-bac5-4a9b05628add)
+## News page
+![HauNews](https://github.com/user-attachments/assets/ab8919f8-4938-45b2-a657-c276f3427bfa)
+## Photos page
+![HauPhotos](https://github.com/user-attachments/assets/c68c97d0-12ac-4afa-9783-50bfd684b71a)
+## Admin page
+![HauAdmin](https://github.com/user-attachments/assets/57f1f57a-5e25-4961-b1d5-b58f0a7fdf06)
+## Scores page
+![HauScores](https://github.com/user-attachments/assets/a6d3b466-2c0c-43b0-b188-63b4ef4874c5)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Built with ❤️ by [Jaku]
+I am continuously learning new technologies and improving my skills while building this website!

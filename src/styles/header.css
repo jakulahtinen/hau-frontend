@@ -77,14 +77,52 @@
 
 
 /* Media Queries */
-@media (min-width: 1200px) {
-    .header {
-        height: 75vh; 
-    }
-}
-
+/* 1. Target medium to small screens (e.g., tablets and large phones) */
 @media (max-width: 768px) {
     .header {
         height: 50vh;
+    }
+    
+    .headerTextContainer {
+        /* Move the text higher since the header height is now smaller (50vh) */
+        top: 40%; /* Adjusted from 30% for better vertical centering */
+        
+        /* Reduce width slightly if necessary, though 90% is generally good */
+        width: 95%; 
+    }
+    
+    .clubNameAnimated {
+        /* Significantly reduce the main title font size */
+        font-size: 3rem; 
+        letter-spacing: 1px;
+    }
+
+    .sinceText {
+        /* Reduce the subtitle font size */
+        font-size: 1.5rem; 
+        letter-spacing: 3px; 
+    }
+}
+
+/* 2. Target extra small screens (e.g., typical smartphones) */
+@media (max-width: 480px) {
+    .header {
+        height: 30vh; /* Make the header even shorter */
+    }
+
+    .headerTextContainer {
+        top: 45%; /* Center the text slightly lower */
+    }
+
+    .clubNameAnimated {
+        /* Further reduce the main title font size to prevent overflow */
+        font-size: 3.5rem; /* Reduced from 3rem */
+        letter-spacing: 0;
+    }
+
+    .sinceText {
+        /* Further reduce the subtitle font size */
+        font-size: 1rem; /* Reduced from 1.5rem */
+        letter-spacing: 2px; 
     }
 }

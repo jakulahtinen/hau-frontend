@@ -26,6 +26,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     transition: transform 0.3s;
+    cursor: pointer;
 }
 
 .photo-item:hover {
@@ -154,4 +155,14 @@
   color: white;
   font-size: 1.1rem;
   opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .lightbox-prev {
+    display: none;
+  }
+
+  .lightbox-next {
+    display: none;
+  }
 }

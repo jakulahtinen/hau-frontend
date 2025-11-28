@@ -16,7 +16,6 @@ const AddScores = () => {
     const [error, setError] = useState<string | null>(null);
 
 
-    // Fetch scores
     const loadScores = async () => {
         try {
             const data = await fetchScores();
