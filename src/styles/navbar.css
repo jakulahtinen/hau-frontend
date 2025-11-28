@@ -13,25 +13,16 @@
 .menu-icon {
     display: none;
     position: absolute;
-    top: 20px;
+    top: 32%;
     right: 20px;
     z-index: 1001;
     cursor: pointer;
     transition: transform 0.4s ease;
-    color: white;
-  }
+    color: black;
+}
 
-  @keyframes spinOnce {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-.menu-icon.animate-spin {
-animation: spinOnce 0.4s ease-in-out;
+.menu-open-active {
+    color: white !important; /* Force color to white when the menu is open */
 }
 
 .mobile-menu-fullscreen {
