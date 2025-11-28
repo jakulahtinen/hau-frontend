@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Picture } from "../interfaces/picture";
-import { fetchPictures, addPicture, deletePicture, updateCaption } from "../api/picturesApi";
+import { Folder } from "../interfaces/folder";
+import { fetchPictures, addPicture, deletePicture, updateCaption, fetchFolders, createFolder } from "../api/picturesApi";
 import Adminnav from "./adminnav";
 import "../styles/addpicture.css";
 
@@ -14,9 +15,83 @@ const AddPicture = () => {
     const [editId, setEditId] = useState<number | null>(null);
     const [successMessage, setSuccesMessage] = useState<string | null>(null);
 
+    const [folders, setFolders] = useState<Folder[]>([]);
+    const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
+    const [newFolderName, setNewFolderName] = useState("");
+    const [isCreatingNewFolder, setIsCreatingNewFolder] = useState(false);
+
+
+
     useEffect(() => {
-        loadPictures();
+        loadData(); // Combined data loading function
     }, []);
+
+    const loadData = async () => {
+        try {
+            // Load Pictures (only needed for the existing gallery list)
+            const picturesData = await fetchPictures(); 
+            setPictures(picturesData);
+
+            // Load Folders (New)
+            const foldersData = await fetchFolders();
+            setFolders(foldersData);
+            
+            // Set the latest folder as default selection if available
+            if (foldersData.length > 0) {
+                setSelectedFolderId(foldersData[0].id);
+            }
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    };
+
+    const handleCreateFolder = async () => {
+        if (!newFolderName.trim()) {
+            alert("Syötä kansion nimi.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Et ole kirjautunut sisään!");
+            return;
+        }
+
+        try {
+            const newFolder = await createFolder(newFolderName.trim(), token);
+            setFolders([newFolder, ...folders]); // Add new folder to the top
+            setSelectedFolderId(newFolder.id); // Select the new folder
+            setNewFolderName("");
+            setIsCreatingNewFolder(false);
+        } catch (error) {
+            console.error("Error creating folder:", error);
+            alert("Kansion luominen epäonnistui.");
+        }
+    };
+
+    const handleAddPicture = async () => {
+        if (!imageFile || !selectedFolderId) {
+            alert("Valitse kuva JA kansio.");
+            return;
+        }
+
+        try {
+            // Pass the selectedFolderId to the API call
+            await addPicture(title, imageFile, selectedFolderId); 
+            setSuccesMessage("Kuva lisätty onnistuneesti!");
+            // ... [Reset form fields] ...
+            setTitle("");
+            if (fileInputRef.current) fileInputRef.current.value = "";
+            setImageFile(null);
+            setImagePreview(null);
+            loadData(); 
+
+        } catch (error) {
+            console.error("Error adding picture:", error);
+            alert("Kuvan lisääminen epäonnistui.");
+        }
+    };
+
 
     const loadPictures = async () => {
         try {
@@ -44,30 +119,6 @@ const AddPicture = () => {
                 setImagePreview(reader.result as string);
             };
             reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    const handleAddPicture = async () => {
-        if (!imageFile) {
-            alert("Valitse kuva.");
-            return;
-        }
-        try {
-            await addPicture(title, imageFile);
-            setSuccesMessage("Kuva lisatty onnistuneesti!");
-            setTimeout(() => {
-                setSuccesMessage(null);
-            }, 4000);
-            setTitle("");
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
-            setImageFile(null);
-            setImagePreview(null);
-            loadPictures();
-        } catch (error) {
-            console.error("Error adding picture:", error);
-            alert("Kuvan lisääminen epäonnistui.");
         }
     };
 
@@ -117,11 +168,46 @@ const AddPicture = () => {
             <Adminnav />
             <div className="add-picture">
                 <h2>Lisää uusi kuva</h2>
+
+                {/* --- FOLDER SELECTION/CREATION --- */}
+                <div className="folder-management">
+                    <select
+                        value={selectedFolderId ?? ""}
+                        onChange={(e) => setSelectedFolderId(Number(e.target.value))}
+                        disabled={isCreatingNewFolder}
+                    >
+                        <option value="" disabled>Valitse kansio</option>
+                        {folders.map(folder => (
+                            <option key={folder.id} value={folder.id}>{folder.name}</option>
+                        ))}
+                    </select>
+
+                    <button 
+                        onClick={() => setIsCreatingNewFolder(prev => !prev)}
+                        className="create-folder-toggle"
+                    >
+                        {isCreatingNewFolder ? "Peruuta" : "Luo uusi kansio"}
+                    </button>
+                    
+                    {isCreatingNewFolder && (
+                        <div className="new-folder-input">
+                            <input
+                                type="text"
+                                placeholder="Uuden kansion nimi"
+                                value={newFolderName}
+                                onChange={(e) => setNewFolderName(e.target.value)}
+                            />
+                            <button onClick={handleCreateFolder}>Luo</button>
+                        </div>
+                    )}
+                </div>
+
                 <input
                  type="file" 
                  accept="image/*" 
                  onChange={handleFileChange} 
                  ref={fileInputRef}
+                 disabled={editMode}
                 />
 
                 {imagePreview && (
@@ -131,7 +217,6 @@ const AddPicture = () => {
                         <button onClick={handleDeleteImage} className="delete-picture">Poista kuva</button>
                     </div>
                 )}
-
                 <textarea
                 placeholder="Kuvateksti..."
                 value={title}

@@ -1,93 +1,120 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState, useRef } from "react";
 import { Picture } from "../interfaces/picture";
-import { fetchPictures } from "../api/picturesApi";
+import { Folder } from "../interfaces/folder";
+import { fetchFolders, fetchLatestPictures, fetchPicturesByFolder } from "../api/picturesApi";
 import '../styles/photos.css';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
-const getYear = (dateStr: string) => new Date(dateStr).getFullYear();
-const getMonth = (dateStr: string) => new Date(dateStr).getMonth() + 1;
 
 const Photospage = () => {
-    const [photosList, setPhotosList] = useState<Picture[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [filteredPhotos, setFilteredPhotos] = useState<Picture[]>([]);
-    const [selectedYear, setSelectedYear] = useState<number | null>(null);
-    const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null); 
-    const [showMonths, setShowMonths] = useState<boolean>(false);
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
     const [touchMoveX, setTouchMoveX] = useState<number | null>(null);
+    const [folders, setFolders] = useState<Folder[]>([]);
+    const [latestPhotos, setLatestPhotos] = useState<Picture[]>([]); 
+    const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
+    const [folderPhotos, setFolderPhotos] = useState<Picture[]>([]); 
+    const folderDetailRef = useRef<HTMLDivElement>(null); 
+    const [offsetX, setOffsetX] = useState(0); 
+    const THRESHOLD = 50;
+    const SLIDE_WIDTH_PERCENTAGE = 100;
+    const translatePercentage = lightboxIndex !== null ? lightboxIndex * SLIDE_WIDTH_PERCENTAGE : 0;
+    const shouldAnimate = touchStartX === null && offsetX === 0;    
 
     const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (lightboxIndex === null) return;
         setTouchStartX(e.touches[0].clientX);
-        setTouchMoveX(null); 
+        setOffsetX(0);
     };
+
     const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-        setTouchMoveX(e.touches[0].clientX);
+        if (touchStartX === null || lightboxIndex === null) return;
+
+        const touchEndX = e.touches[0].clientX;
+        const diff = touchStartX - touchEndX;
+
+        setOffsetX(diff);
     };
+
     const handleTouchEnd = () => {
-        if (touchStartX === null || touchMoveX === null) return;
+        if (touchStartX === null || lightboxIndex === null) return;
 
-        const deltaX = touchStartX - touchMoveX;
-        const swipeThreshold = 50;
-
-        if (Math.abs(deltaX) > swipeThreshold) {
-            if (deltaX > 0) {
+        if (Math.abs(offsetX) > THRESHOLD) {
+            if (offsetX > 0) {
+                // Left → next image
                 setLightboxIndex((prev) => (prev! + 1) % displayPhotos.length);
-            } 
-            else {
+            } else {
+                // Right → previous image
                 setLightboxIndex((prev) => (prev! - 1 + displayPhotos.length) % displayPhotos.length);
             }
         }
-        
+
         setTouchStartX(null);
-        setTouchMoveX(null);
+        setTimeout(() => {
+            setOffsetX(0);
+        }, 200);
     };
 
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            // 1. Fetch Latest 8 Photos
+            const latestData = await fetchLatestPictures(8);
+            setLatestPhotos(latestData);
+
+            // 2. Fetch Folders (Albums)
+            const folderData = await fetchFolders();
+            setFolders(folderData);
+
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Tuntematon virhe");
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    // Load data on component mount
     useEffect(() => {
-        const loadPhotos = async () => {
-            try {
-                setLoading(true);
-                const data = await fetchPictures();
-                setPhotosList(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Tuntematon virhe");
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadPhotos();
+        loadData();
     }, []);
 
-
-    // Filter by year/month
+        // Load pictures for a specific folder when one is selected
     useEffect(() => {
-        let filtered = [...photosList];
+        const loadFolderPhotos = async () => {
+            if (selectedFolder) {
+                setLoading(true);
+                try {
+                    const data = await fetchPicturesByFolder(selectedFolder.id);
+                    setFolderPhotos(data);
+                } catch (err) {
+                    setError("Virhe ladatessa kansion kuvia.");
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        loadFolderPhotos();
+    }, [selectedFolder]);
 
-        if (selectedYear) {
-            filtered = filtered.filter(p => p.uploadedAt && getYear(p.uploadedAt.toString()) === selectedYear);
-        }
-
-        if (selectedMonth) {
-            filtered = filtered.filter(p => p.uploadedAt && getMonth(p.uploadedAt.toString()) === selectedMonth);
-        }
-
-        setFilteredPhotos(filtered);
-    }, [photosList, selectedYear, selectedMonth]);
+    useEffect(() => {
+        if (selectedFolder && folderDetailRef.current) {
+            setTimeout(() => {
+                const navbarHeight = document.querySelector(".navbar")?.clientHeight || 80; 
+                const offset = navbarHeight + 140; 
+                const targetElement = folderDetailRef.current!;
+                const top = targetElement.getBoundingClientRect().top + window.scrollY - offset;
     
+                window.scrollTo({ top, behavior: "smooth" });
+            }, 200); 
+        }
+    }, [selectedFolder, folderPhotos.length]);
 
-    // Compute available years dynamically
-    const availableYears = Array.from(new Set(photosList.map(p => getYear(p.uploadedAt?.toString() ?? "")))).sort((a, b) => b - a);
-
-    // Compute available months for selected year
-    const availableMonths = selectedYear
-        ? Array.from(new Set(photosList
-            .filter(p => getYear(p.uploadedAt?.toString() ?? "") === selectedYear)
-            .map(p => getMonth(p.uploadedAt?.toString() ?? ""))))
-        : [];
-
-    // Show latest 12 if no year selected
-    const displayPhotos = selectedYear ? filteredPhotos : photosList.slice(-12).reverse();
+    // Determine which photo list to display for the lightbox
+    const displayPhotos = selectedFolder ? folderPhotos : latestPhotos; 
 
     useEffect(() => {
         if (lightboxIndex === null) return;
@@ -115,71 +142,65 @@ const Photospage = () => {
 
     
     return (
-        <div>
-            {/* Select year */}
-            <div className="year-filter">
-                {availableYears.map(year => {
-                    const isActive = year === selectedYear && showMonths;
+        <div className="photos-page-wrapper">
+            <h1>Kuvagalleria</h1>
 
-                    return (
-                        <button
-                            key={year}
-                            className={isActive ? "active" : ""}
-                            onClick={() => {
-                                if (year === selectedYear) {
-                                    setShowMonths(prev => !prev);
-                                    setSelectedMonth(null); 
-                                } else {
-                                    setSelectedYear(year);
-                                    setSelectedMonth(null);
-                                    setShowMonths(true);
-                                }
-                            }}
-                        >
-                            {year}
-                        </button>
-                    );
-                })}
-            </div>
+                        {selectedFolder ? (
+                // --- FOLDER DETAIL VIEW ---
+                <div className="folder-detail-view" ref={folderDetailRef}>
+                    <div className="folder-header">
+                        <ArrowBackIosNewRoundedIcon className="back-button" fontSize="large" style={{ color: "black" }} onClick={() => setSelectedFolder(null)}/>
+                    </div>
+                    <h2>{selectedFolder.name}</h2>
+                    
+                    <div className="photos-container">
+                        {folderPhotos.map((photo, index) => (
+                             <div className="photo-item" key={photo.id} onClick={() => setLightboxIndex(index)}>
+                                <img src={photo.imageUrl} alt={photo.title} className="photo-image" />
+                                <h3 className="photo-title">{photo.title}</h3>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-            {/* Select month */}
-            {selectedYear && showMonths && (
-                <div className="month-filter">
-                    {availableMonths.map(month => {
-                        const isActive = month === selectedMonth;
+            ) : (
+                // --- MAIN GALLERY VIEW (LATEST & FOLDERS) ---
+                <div>
+                    
+                    {/* 1. LATEST PHOTOS PREVIEW (6 Images) */}
+                    <h2>Viimeisimmät kuvat</h2>
+                    <div className="photos-container latest-preview-grid">
+                        {latestPhotos.map((photo, index) => (
+                             <div className="photo-item latest-item" key={photo.id} onClick={() => setLightboxIndex(index)}>
+                                <img src={photo.imageUrl} alt={photo.title} className="photo-image" />
+                                <h3 className="photo-title">{photo.title}</h3>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <hr />
 
-                        return (
-                            <button
-                                key={month}
-                                className={isActive ? "active" : ""}
-                                onClick={() => {
-                                    if (month === selectedMonth) {
-                                        // Toggle off
-                                        setSelectedMonth(null);
-                                    } else {
-                                        setSelectedMonth(month);
-                                    }
-                                }}
+                    {/* 2. FOLDER GRID */}
+                    <h2>Selaa kansioita</h2>
+                    <div className="folders-container folder-grid">
+                        {folders.map((folder) => (
+                            <div 
+                                className="folder-card" 
+                                key={folder.id} 
+                                onClick={() => setSelectedFolder(folder)}
                             >
-                                {month} / {selectedYear}
-                            </button>
-                        );
-                    })}
+                                <img 
+                                    src={folder.coverImageUrl || 'placeholder.jpg'}
+                                    alt={folder.name} 
+                                    className="folder-cover-image" 
+                                />
+                                <h3 className="folder-title-overlay">{folder.name}</h3>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
-        
-            <div className="photos-container">
-                {displayPhotos.map((photo, index) => (
-                    <div className="photo-item" key={photo.id} onClick={() => setLightboxIndex(index)}>
-                        <img
-                            src={photo.imageUrl ? photo.imageUrl : 'default-image.jpg'}
-                            alt={photo.title}
-                            className="photo-image"
-                        />
-                        <h3 className="photo-title">{photo.title}</h3>
-                    </div>
-                ))}
-            </div>
+
             {lightboxIndex !== null && (
                 <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}
                     onTouchStart={handleTouchStart}
@@ -189,11 +210,16 @@ const Photospage = () => {
                     <div className="lightbox-content" onClick={e => e.stopPropagation()}>
                         <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>✖</button>
                         <button className="lightbox-prev" onClick={() => setLightboxIndex((lightboxIndex - 1 + displayPhotos.length) % displayPhotos.length)}>←</button>
-                        <img
-                            src={displayPhotos[lightboxIndex].imageUrl}
-                            alt={displayPhotos[lightboxIndex].title}
-                            className="lightbox-image"
-                        />
+                    <img
+                        src={displayPhotos[lightboxIndex].imageUrl}
+                        alt={displayPhotos[lightboxIndex].title}
+                        className="lightbox-image"
+                        style={{
+                            transition: offsetX === 0 ? 'transform 0.3s ease-out' : 'none', 
+                            transform: `translateX(${-offsetX}px)` 
+                        }}
+                    />
+
                         <button className="lightbox-next" onClick={() => setLightboxIndex((lightboxIndex + 1) % displayPhotos.length)}>→</button>
                         <p className="lightbox-counter">
                             {lightboxIndex + 1} / {displayPhotos.length}

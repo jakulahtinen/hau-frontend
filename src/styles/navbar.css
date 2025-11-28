@@ -11,27 +11,15 @@
 }
 
 .menu-icon {
-    display: none;
+    display: none; /* Keep hidden on desktop */
     position: absolute;
-    top: 20px;
-    right: 20px;
     z-index: 1001;
     cursor: pointer;
     transition: transform 0.4s ease;
-    color: white;
-  }
+}
 
-  @keyframes spinOnce {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-.menu-icon.animate-spin {
-animation: spinOnce 0.4s ease-in-out;
+.menu-open-active {
+    color: white !important; /* Force color to white when the menu is open */
 }
 
 .mobile-menu-fullscreen {
@@ -146,9 +134,47 @@ color: #007bff;
 
     .navbar-top {
         display: flex;
+        width: 100%; 
+        justify-content: space-between;
+        align-items: center;
     }
 
     .menu-icon {
         display: block;
+    }
+
+    .navbar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px; 
+        background-color: rgba(0, 0, 0, 0.75);  
+        display: flex;
+        align-items: center;
+        justify-content: space-between; 
+        padding: 0 20px;
+        z-index: 1000;
+    }
+
+    .menu-icon {
+        position: fixed; 
+        top: 10px;
+        right: 20px;
+        color: white;
+        padding: 10px 10px;
+    }
+
+    .mobile-home-link {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        margin: 0;
+        padding: 5px 10px;
+    }
+    
+    .menu-icon:not(.menu-open-active) {
+        color: white;
     }
 }

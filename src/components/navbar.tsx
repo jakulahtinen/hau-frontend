@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from '@mui/icons-material/Close';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -70,12 +71,26 @@ const Navbar = () => {
         <nav className="navbar-container">
             <div className="navbar-top">
                 {isMobile && (
-                    <div 
-                        className="menu-icon" 
-                        onClick={handleMenuToggle}
-                    >
-                        <MenuIcon style={{ fontSize: "36px" }} />
-                    </div>
+                    <>
+                        <Link 
+                            to="/" 
+                            className="mobile-home-link"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Etusivu
+                        </Link>
+
+                        <div 
+                            className={`menu-icon ${menuOpen ? 'menu-open-active' : ''}`}
+                            onClick={handleMenuToggle}
+                        >
+                            {menuOpen ? (
+                                <CloseIcon style={{ fontSize: "36px" }} /> 
+                            ) : (
+                                <MenuIcon style={{ fontSize: "36px" }} /> 
+                            )}
+                        </div>
+                    </>
                 )}
             </div>
     

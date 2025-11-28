@@ -60,8 +60,8 @@ const AdminPanel = () => {
 
     // Add news
     const handleAddNews = async () => {
-        if (!title || !content) {
-            alert("Täytä kaikki kentät!");
+        if (!title) {
+            alert("Otsikko on pakollinen!");
             return;
         }
     

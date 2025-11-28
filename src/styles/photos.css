@@ -1,5 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+/* Container for the whole page */
+.photos-page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 1. LATEST PHOTOS PREVIEW GRID (e.g., 4 columns) */
+.latest-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+/* 2. FOLDER GRID (Album View) (e.g., 3 columns) */
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px;
+}
+
+.folder-card {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.folder-card:hover {
+    transform: translateY(-5px);
+}
+
+.folder-cover-image {
+    width: 100%;
+    height: 250px; 
+    object-fit: cover;
+}
+
+.folder-title-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.folder-header {
+      width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
 .photo-link {
     display: block; 
     text-decoration: none;
