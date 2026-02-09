@@ -48,6 +48,37 @@ export const fetchLatestPictures = async (count: number = 6): Promise<Picture[]>
     return response.json();
 };
 
+// DELETE folder
+export const deleteFolder = async (id: number, token: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/api/Folders/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Kansion poistaminen epäonnistui");
+    }
+};
+
+// UPDATE folder name
+export const renameFolder = async (id: number, newName: string, token: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/api/Folders/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: newName }),
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Kansion uudelleennimeäminen epäonnistui");
+    }
+};
 
 
 //GET PICTURE

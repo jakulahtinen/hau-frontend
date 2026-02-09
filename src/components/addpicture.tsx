@@ -13,7 +13,7 @@ const AddPicture = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number | null>(null);
-    const [successMessage, setSuccesMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const [folders, setFolders] = useState<Folder[]>([]);
     const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
@@ -78,7 +78,7 @@ const AddPicture = () => {
         try {
             // Pass the selectedFolderId to the API call
             await addPicture(title, imageFile, selectedFolderId); 
-            setSuccesMessage("Kuva lisätty onnistuneesti!");
+            setSuccessMessage("Kuva lisätty onnistuneesti!");
             // ... [Reset form fields] ...
             setTitle("");
             if (fileInputRef.current) fileInputRef.current.value = "";
@@ -131,9 +131,9 @@ const AddPicture = () => {
             setTitle("");
             setImageFile(null);
 
-            setSuccesMessage("Kuvateksti päivitetty onnistuneesti!");
+            setSuccessMessage("Kuvateksti päivitetty onnistuneesti!");
             setTimeout(() => {  
-                setSuccesMessage(null);
+                setSuccessMessage(null);
             }, 4000);
             loadPictures();
         } catch (error) {
@@ -150,11 +150,11 @@ const AddPicture = () => {
     const handleDeletePicture = async (id: number) => {
         try {
             await deletePicture(id);
-            setSuccesMessage("Kuva poistettu onnistuneesti!");
+            setSuccessMessage("Kuva poistettu onnistuneesti!");
 
             //Hide message after 2 seconds>
             setTimeout(() => {  
-                setSuccesMessage(null);
+                setSuccessMessage(null);
             }, 4000);
             loadPictures();
         } catch (error) {
